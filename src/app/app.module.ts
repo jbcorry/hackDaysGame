@@ -12,6 +12,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './templates/signup/signup.component';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FancytextComponent } from './templates/fancytext/fancytext.component';
+import { HeaderComponent } from './templates/header/header.component';
+import { FooterComponent } from './templates/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { FancytextComponent } from './templates/fancytext/fancytext.component';
     GameComponent,
     HomeComponent,
     SignupComponent,
-    FancytextComponent
+    FancytextComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
