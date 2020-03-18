@@ -30,7 +30,10 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/phaser/dist/phaser.min.js",
+              "node_modules/phaser/types/phaser.d.ts"
+            ]
           },
           "configurations": {
             "production": {
