@@ -1,0 +1,9 @@
+.text-wrap{
+    display: inline-block;
+}
+.text-wrap > div{
+    display: none;
+    &.active{
+        display: inline-block;
+    }
+}

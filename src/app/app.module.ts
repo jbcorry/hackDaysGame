@@ -11,13 +11,15 @@ import { GameComponent } from './pages/game/game.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './templates/signup/signup.component';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { FancytextComponent } from './templates/fancytext/fancytext.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     HomeComponent,
-    SignupComponent
+    SignupComponent,
+    FancytextComponent
   ],
   imports: [
     BrowserModule,

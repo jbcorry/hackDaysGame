@@ -1,2 +1,39 @@
-<p>signup works!</p>
+<div class="form">
+    <label>
+      <!-- <p class="label-txt inco">ENTER YOUR USERNAME</p> -->
+      <app-fancytext 
+            [text]="'ENTER'" 
+            [delay]="300">
+        </app-fancytext>
+        <div class="ml-2 d-inline-block"></div>
+        <app-fancytext 
+              [text]="'YOUR'" 
+              [delay]="800">
+          </app-fancytext>
+        <div class="ml-2 d-inline-block"></div>
+        <app-fancytext 
+              [text]="'USERNAME'" 
+              [delay]="1200">
+          </app-fancytext>
+      <input type="text" class="input">
+      <div class="line-box">
+        <div class="line"></div>
+      </div>
+    </label>
+    <div class="row justify-content-center">
+        <div class="col-auto">
+            <button (click)="timeSelect = 2" [ngClass]="{active: timeSelect == 2}">2 Mins</button>
+        </div>
+        <div class="col-auto">
+            <button (click)="timeSelect = 5" [ngClass]="{active: timeSelect == 5}">5 Mins</button>
+        </div>
+        <div class="col-auto">
+            <button (click)="timeSelect = 10" [ngClass]="{active: timeSelect == 10}">10 Mins</button>
+        </div>
+    </div>
+    <div class="row mt-5 justify-content-center">
+        <button type="submit">submit</button>
+    </div>
+</div>
+
 <button (click)="addScore()">Add the score</button>

@@ -8,6 +8,8 @@ import { MainService } from 'src/app/services/main.service';
 })
 export class SignupComponent implements OnInit {
 
+  timeSelect = 2;
+  
   constructor(
     private mainService: MainService
   ) { }
@@ -16,7 +18,8 @@ export class SignupComponent implements OnInit {
   }
 
   addScore(){
-    this.mainService.createScore();
+    var score = {}
+    this.mainService.createScore(score);
   }
 
 }

@@ -10,16 +10,23 @@ export class MainService {
     private firestore: AngularFirestore
     ) { }
 
-  getScores() {
-    return this.firestore.collection('scores').snapshotChanges();
-  }
-
-  createScore(){
-    var score = {
-      score: 1000,
-      user: "SUP NERD"
+    getScores() {
+      return this.firestore.collection('scores').snapshotChanges();
     }
-    return this.firestore.collection('scores').add(score);
-  }
+    createScore(score){
+      return this.firestore.collection('scores').add(score);
+    }
+    getUserScores(userID) {
+      return this.firestore.collection('scores/'+userID).snapshotChanges();
+    }
+    getUser() {
+      return this.firestore.collection('scores').snapshotChanges();
+    }
+    createUser(name){
+      var user = {
+        username: name
+      }
+      return this.firestore.collection('users').add(user);
+    }
 
 }
