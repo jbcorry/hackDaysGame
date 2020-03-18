@@ -33,8 +33,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     //helper collide functions
-    public squareCollideWithPlatform() {
-        console.log('boom!');
+    public squareCollideWithPlatform(square, platform) {
+        if (square.body.touching.down && platform.body.touching.up) {
+            console.log('jump again');
+        }
     }
 
     public squareCollideWithGround() {
@@ -73,6 +75,7 @@ export class GameScene extends Phaser.Scene {
         this.platform.depth = 10;
         this.physics.add.existing(this.platform);
         this.platform.body.collideWorldBounds = true;
+        this.platform.body.immovable = true;
 
         this.ground = this.add.rectangle(0, windowHeight, windowWidth * 2, 70, 0xFFFFFF) as any;
         this.ground.depth = 10;
@@ -91,7 +94,11 @@ export class GameScene extends Phaser.Scene {
     }
     public update(time: number) {
   
-        this.physics.collide(this.square, this.platform, this.squareCollideWithPlatform);
+        this.physics.collide(this.square, this.platform, this.squareCollideWithPlatform, null, {
+            this: this,
+            square: this.square,
+            platform: this.platform
+        });
         this.physics.collide(this.square, this.foregroundLayer, this.squareCollideWithGround);
         this.physics.collide(this.platform, this.foregroundLayer, this.platCollideWithGround);
 
@@ -118,7 +125,7 @@ export class GameScene extends Phaser.Scene {
         // } else {
         //   this.square.body.setVelocityY(0);
         // }
-        if (this.square.y !== window.innerHeight - 50) {
+        if (this.square.y !== window.innerHeight - 50 && !this.square.body.touching.down && !this.platform.body.touching.up) {
             this.isJumping = true;
         } else {
             this.isJumping = false;
