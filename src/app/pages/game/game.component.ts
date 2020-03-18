@@ -127,7 +127,7 @@ export class GameScene extends Phaser.Scene {
     // } else {
     //   this.square.body.setVelocityY(0);
     // }
-    if (this.square.y !== 780) {
+    if (this.square.y !== window.innerHeight - 50) {
       this.isJumping = true;
     } else {
       this.isJumping = false;
