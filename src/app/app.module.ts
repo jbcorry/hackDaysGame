@@ -14,6 +14,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FancytextComponent } from './templates/fancytext/fancytext.component';
 import { HeaderComponent } from './templates/header/header.component';
 import { FooterComponent } from './templates/footer/footer.component';
+import { TutorialComponent } from './pages/tutorial/tutorial.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { FooterComponent } from './templates/footer/footer.component';
     SignupComponent,
     FancytextComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    TutorialComponent
   ],
   imports: [
     BrowserModule,
