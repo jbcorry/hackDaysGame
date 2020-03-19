@@ -6,10 +6,17 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 export class GameScene extends Phaser.Scene {
-    private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private mainBack; middleBack; foregroundLayer; map;
+    private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private tileset;
     public isJumping = false;
+    public isFalling = false;
+    public lastSpriteY = 0;
+
+    //try robo sprite
+    // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
+    private robot: any;
+
   
     delta: number;
     lastPlatTime: number;
@@ -32,15 +39,39 @@ export class GameScene extends Phaser.Scene {
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
-        this.load.image('plat-center', 'assets/images/platform-center.png');
+    
+        this.load.image('robo-idle', 'assets/images/player/robo-idle.svg');
+        this.load.image('robo-jump', 'assets/images/player/robo-jump.svg');
+        this.load.image('robo-back', 'assets/images/player/robo-back.svg');
+        this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
+        this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
+        this.load.image('plat-center', 'assets/images/platform-center.svg');
+  
     }
     public create() {
         let windowWidth = this.game.canvas.width;
         let windowHeight = this.game.canvas.height;
-        this.square = this.add.rectangle(200, windowHeight / 2 - 70, 100, 100, 0xFFFFFF) as any;
-        this.square.depth = 10;
-        this.physics.add.existing(this.square);
-        this.square.body.collideWorldBounds = true;
+        this.score = this.add.rectangle(0, 0, 0, 0, 0xFFFFFF) as any;
+        this.score.depth = 0;
+        this.physics.add.existing(this.score);
+        this.score.body.collideWorldBounds = false;
+
+        //animations work
+
+        this.anims.create({
+          
+        })
+
+        //robo sprite
+        this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward');
+        this.robot.setTexture('robo-idle');
+        this.robot.height = 100;
+        this.robot.width = 75;
+        this.robot.setDisplaySize(75,100);
+        this.robot.depth = 10;
+        this.physics.add.existing(this.robot);
+        this.robot.body.collideWorldBounds = true;
+        console.log(this.robot)
 
         this.mainBack = this.add.tileSprite(windowWidth / 2, 0, windowWidth * 2, windowHeight, 'main-back');
         this.mainBack.depth = 0;
@@ -64,9 +95,9 @@ export class GameScene extends Phaser.Scene {
 
     }
     public update(time: number) {
-
-        this.physics.collide(this.square, this.foregroundLayer);
-
+  
+        this.physics.collide(this.robot, this.platforms);
+        this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
             if (element.body.x == 0 || element.body.x + element.body.width == this.game.config.width) {
                 element.setDisplaySize(element.body.width - 7, element.body.height);
@@ -78,76 +109,107 @@ export class GameScene extends Phaser.Scene {
         });
 
         const cursorKeys = this.input.keyboard.createCursorKeys();
-        // if (cursorKeys.up.isDown) {
-        //   this.square.body.setVelocityY(-500);
-        // } else if (cursorKeys.down.isDown) {
-        //   this.square.body.setVelocityY(500);
-        // } else {
-        //   this.square.body.setVelocityY(0);
-        // }
-        if (this.square.y !== window.innerHeight - 50 && !this.square.body.touching.down) {
-            this.isJumping = true;
-        } else {
-            this.isJumping = false;
-        }
+        
+        //restart game
         if (cursorKeys.space.isDown) {
-            this.scene.restart();
+          this.scene.restart();
         }
-        if (cursorKeys.right.isDown) {
 
-            this.square.body.setVelocityX(500);
-            this.platforms.children.entries.forEach(element => {
-                element.body.setVelocityX(0);
-            });
-
-            if (cursorKeys.up.isDown && !this.isJumping) {
-                this.square.body.setVelocityY(-500);
-            }
-            if (this.square.x >= 650) {
-                this.mainBack.tilePositionX += .5;
-                this.middleBack.tilePositionX += 2;
-                this.foregroundLayer.tilePositionX += 8.3;
-                this.square.body.setVelocityX(0);
-
-                this.spawnPlat(time).then(() => {
-                    this.platforms.children.entries.forEach(element => {
-                        element.body.setVelocityX(-500);
-                    });
-                });
-
-
-            }
-        } else if (cursorKeys.left.isDown) {
-            this.square.body.setVelocityX(-500);
-
-            this.platforms.children.entries.forEach(element => {
-                element.body.setVelocityX(0);
-            });
-
-            if (this.square.x <= 300) {
-            this.mainBack.tilePositionX -= .5;
-            this.middleBack.tilePositionX -= 2;
-            this.foregroundLayer.tilePositionX -= 8.3;
-            this.square.body.setVelocityX(0);
-
-            this.platforms.children.entries.forEach(element => {
-                element.body.setVelocityX(500);
-            });
-            }
-            if (cursorKeys.up.isDown && !this.isJumping) {
-            this.square.body.setVelocityY(-500);
-            }
-        } else if (cursorKeys.up.isDown && !this.isJumping) {
-            this.square.body.setVelocityY(-500);
+        // // check jumping
+        var goodY = Math.floor(this.robot.y);
+        var jumpheight = window.innerHeight + 8 - this.robot.height;
+        if(this.robot.body.touching.down || goodY > jumpheight){
+          this.isFalling = false;
+          this.isJumping = false;
         } else {
-            this.square.body.setVelocityX(0);
-            this.platforms.children.entries.forEach(element => {
-                element.body.setVelocityX(0);
-            });
+          this.isFalling = true;
+          this.isJumping = true;
         }
+
+        //movement
+        if (cursorKeys.right.isDown) {
+          this.GoRight(cursorKeys, time);
+        } else if (cursorKeys.left.isDown) {
+          this.GoLeft(cursorKeys);
+        } else if (cursorKeys.up.isDown && !this.isJumping) {
+            this.robot.body.setVelocityY(-500);
+        } else {
+          this.score.body.setVelocityX(0);
+          this.robot.body.setVelocityX(0);
+          this.platforms.children.entries.forEach(element => {
+              element.body.setVelocityX(0);
+          });
+          if(this.isJumping){
+            this.updateTexture('robo-jump');
+          } else {
+            this.updateTexture('robo-idle');
+          }
+        }
+        //set Score
+        var goodScore = Math.floor(this.score.x);
+        console.log(this.info);
+        this.info.text = "SCORE: " + goodScore;
     }
 
+    private GoRight(cursorKeys, time){
+      this.score.body.setVelocityX(500);  
+      this.updateTexture('robo-forward');
+      this.robot.body.setVelocityX(500);
+      
+      this.platforms.children.entries.forEach(element => {
+        element.body.setVelocityX(0);
+      });
+      if (cursorKeys.up.isDown && !this.isJumping) {
+        this.robot.body.setVelocityY(-500);
+      }
+      if (this.robot.x >= 650) {
+        this.mainBack.tilePositionX += .5;
+        this.middleBack.tilePositionX += 2;
+        this.foregroundLayer.tilePositionX += 8.3;
+        this.score.body.setVelocityX(500);
+        this.robot.body.setVelocityX(0);
+        this.spawnPlat(time).then(() => {
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(-500);
+            });
+        });
+      }
+    }
 
+    private GoLeft(cursorKeys){
+      this.score.body.setVelocityX(-500);  
+      this.updateTexture('robo-back');
+      this.robot.body.setVelocityX(-500);
+
+      this.platforms.children.entries.forEach(element => {
+        element.body.setVelocityX(0);
+      });
+      if (this.robot.x <= 300) {
+        this.mainBack.tilePositionX -= .5;
+        this.middleBack.tilePositionX -= 2;
+        this.foregroundLayer.tilePositionX -= 8.3;
+        this.score.body.setVelocityX(-500);
+        this.robot.body.setVelocityX(0);
+        
+        this.platforms.children.entries.forEach(element => {
+          element.body.setVelocityX(500);
+        });
+      }
+      if (cursorKeys.up.isDown && !this.isJumping) {
+        this.robot.body.setVelocityY(-500);
+      }
+    }
+    private updateTexture(texture){
+      console.log(this.robot.x, this.robot.y, "start")
+      var x = this.robot.x;
+      var y = this.robot.y;
+      this.robot.setTexture(texture);
+      this.robot.height = 100;
+      this.robot.width = 75;
+      console.log(this.robot.x, this.robot.y, "end")
+      this.robot.setX(x);
+      this.robot.setY(y);
+    }
     public spawnPlat(time: number) {
         const promise = new Promise((resolve, reject) => {
             const newPlatDiff: number = time - this.lastPlatTime;
@@ -173,7 +235,6 @@ export class GameScene extends Phaser.Scene {
         });
         return promise;
     }
-
     private newPlat(): void {
         let plat: Phaser.Physics.Arcade.Image;
         let randomHeight = this.randomNumber(100, 240);
@@ -184,7 +245,9 @@ export class GameScene extends Phaser.Scene {
         plat.depth = 3;
         plat.setDisplaySize(randomWidth, randomHeight);
         plat.body.immovable = true;
-        this.physics.add.collider(plat, this.square);
+        plat.depth = 10;
+        plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+        this.physics.add.collider(plat, this.robot);
         const platforms = this.platforms.children.entries;
         if (platforms.length > 1) {
             const height = platforms[platforms.length - 1].body.height;
@@ -205,4 +268,4 @@ export class GameScene extends Phaser.Scene {
     public randomNumber(min, max) {
         return Math.random() * (max - min) + min;
     }
-  }
+}
