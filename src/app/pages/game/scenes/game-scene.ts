@@ -6,9 +6,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 export class GameScene extends Phaser.Scene {
-    private mainBack; middleBack; foregroundLayer; map;
+    private mainBack; middleBack; foregroundLayer;
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private tileset;
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
@@ -34,8 +33,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     public preload() {
-        this.load.tilemapTiledJSON('map', 'assets/map.json');
-        this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
@@ -78,7 +75,7 @@ export class GameScene extends Phaser.Scene {
         this.mainBack.height = this.sys.canvas.height * 10;
         this.mainBack.scaleX = .3;
         this.mainBack.scaleY = .3;
-        this.middleBack = this.add.tileSprite(0, 1500, windowWidth, 500, 'middle-bg');
+        this.middleBack = this.add.tileSprite(0, this.sys.canvas.height * 2 - 100, windowWidth, 500, 'middle-bg');
         this.middleBack.width = this.sys.canvas.width * 10;
         this.middleBack.height = this.sys.canvas.height * 10;
         this.middleBack.scaleX = .3;
@@ -197,13 +194,11 @@ export class GameScene extends Phaser.Scene {
       }
     }
     private updateTexture(texture){
-      console.log(this.robot.x, this.robot.y, "start")
       var x = this.robot.x;
       var y = this.robot.y;
       this.robot.setTexture(texture);
       this.robot.height = 100;
       this.robot.width = 75;
-      console.log(this.robot.x, this.robot.y, "end")
       this.robot.setX(x);
       this.robot.setY(y);
     }
