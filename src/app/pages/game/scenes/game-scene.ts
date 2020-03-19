@@ -7,6 +7,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 export class GameScene extends Phaser.Scene {
+    private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private platform: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private ground: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
@@ -60,7 +61,10 @@ export class GameScene extends Phaser.Scene {
   
     }
     public create() {
-    
+        this.score = this.add.rectangle(0, 0, 0, 0, 0xFFFFFF) as any;
+        this.score.depth = 0;
+        this.physics.add.existing(this.score);
+        this.score.body.collideWorldBounds = false;
     
         let windowWidth = window.innerWidth;
         let windowHeight = window.innerHeight;
@@ -128,7 +132,8 @@ export class GameScene extends Phaser.Scene {
         }
         if (cursorKeys.right.isDown) {
     
-            this.square.body.setVelocityX(500);
+          this.score.body.setVelocityX(500);  
+          this.square.body.setVelocityX(500);
             this.platform.body.setVelocityX(0);
 
             if (cursorKeys.up.isDown && !this.isJumping) {
@@ -138,18 +143,21 @@ export class GameScene extends Phaser.Scene {
             this.matrixBack.tilePositionX += .3;
             this.compChipBack.tilePositionX += 1;
             this.foregroundLayer.tilePositionX += 5;
+            this.score.body.setVelocityX(500);
             this.square.body.setVelocityX(0);
             this.platform.body.setVelocityX(-500);
 
             }
         } else if (cursorKeys.left.isDown) {
-            this.square.body.setVelocityX(-500);
+          this.score.body.setVelocityX(-500);  
+          this.square.body.setVelocityX(-500);
             this.platform.body.setVelocityX(0);
 
             if (this.square.x <= 300) {
             this.matrixBack.tilePositionX -= .3;
             this.compChipBack.tilePositionX -= 1;
             this.foregroundLayer.tilePositionX -= 5;
+            this.score.body.setVelocityX(-500);
             this.square.body.setVelocityX(0);
             this.platform.body.setVelocityX(500);
             }
@@ -159,9 +167,12 @@ export class GameScene extends Phaser.Scene {
         } else if (cursorKeys.up.isDown && !this.isJumping) {
             this.square.body.setVelocityY(-500);
         } else {
-            this.square.body.setVelocityX(0);
+          this.score.body.setVelocityX(0);  
+          this.square.body.setVelocityX(0);
             this.platform.body.setVelocityX(0);
         }
+
+        console.log(this.score.x)
     }
   
     private onClick(star: Phaser.Physics.Arcade.Image): () => void {
