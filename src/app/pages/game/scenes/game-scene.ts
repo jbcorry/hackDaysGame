@@ -7,12 +7,12 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class GameScene extends Phaser.Scene {
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private platform: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private matrixBack; compChipBack; foregroundLayer; map;
     private tileset;
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
+    private info: Phaser.GameObjects.Text;
 
     //try robo sprite
     // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
@@ -21,7 +21,6 @@ export class GameScene extends Phaser.Scene {
   
     delta: number;
     lastPlatTime: number;
-    info: Phaser.GameObjects.Text;
     plat;
     platforms;
 
@@ -103,7 +102,7 @@ export class GameScene extends Phaser.Scene {
     }
     public update(time: number) {
   
-        this.physics.collide(this.robot, this.platform);
+        // this.physics.collide(this.robot, this.platform);
         this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
           if (element.body.x == 0) {
@@ -169,7 +168,6 @@ export class GameScene extends Phaser.Scene {
         } else {
           this.score.body.setVelocityX(0);  
           this.robot.body.setVelocityX(0);
-          this.platform.body.setVelocityX(0);
           this.platforms.children.entries.forEach(element => {
               element.body.setVelocityX(0);
           });
@@ -181,7 +179,8 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
-        this.info.text = "SCORE: " + goodScore;
+        console.log(this.info);
+        // this.info.text = "SCORE: " + goodScore; 
     }
 
     private GoRight(cursorKeys, time){
@@ -201,7 +200,6 @@ export class GameScene extends Phaser.Scene {
         this.foregroundLayer.tilePositionX += 5;
         this.score.body.setVelocityX(500);
         this.robot.body.setVelocityX(0);
-        this.platform.body.setVelocityX(-500);
         this.spawnPlat(time).then(() => {
           this.platforms.children.entries.forEach(element => {
               element.body.setVelocityX(-500);
