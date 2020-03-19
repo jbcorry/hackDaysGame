@@ -45,7 +45,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('robo-back', 'assets/images/player/robo-back.svg');
         this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
         this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
-        this.load.image('plat-center', 'assets/images/platform-center.svg');
+        this.load.image('plat-center', 'assets/images/platform-center.png');
   
     }
     public create() {
@@ -71,7 +71,6 @@ export class GameScene extends Phaser.Scene {
         this.robot.depth = 10;
         this.physics.add.existing(this.robot);
         this.robot.body.collideWorldBounds = true;
-        console.log(this.robot)
 
         this.mainBack = this.add.tileSprite(windowWidth / 2, 0, windowWidth * 2, windowHeight, 'main-back');
         this.mainBack.depth = 0;
@@ -147,8 +146,6 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
-        console.log(this.info);
-        this.info.text = "SCORE: " + goodScore;
     }
 
     private GoRight(cursorKeys, time){
