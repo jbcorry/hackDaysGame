@@ -76,7 +76,7 @@ export class GameScene extends Phaser.Scene {
         this.mainBack.height = this.sys.canvas.height * 10;
         this.mainBack.scaleX = .3;
         this.mainBack.scaleY = .3;
-        this.middleBack = this.add.tileSprite(0, 1500, windowWidth, 500, 'middle-bg');
+        this.middleBack = this.add.tileSprite(0, this.sys.canvas.height * 2 - 100, windowWidth, 500, 'middle-bg');
         this.middleBack.width = this.sys.canvas.width * 10;
         this.middleBack.height = this.sys.canvas.height * 10;
         this.middleBack.scaleX = .3;
@@ -195,13 +195,11 @@ export class GameScene extends Phaser.Scene {
       }
     }
     private updateTexture(texture){
-      console.log(this.robot.x, this.robot.y, "start")
       var x = this.robot.x;
       var y = this.robot.y;
       this.robot.setTexture(texture);
       this.robot.height = 100;
       this.robot.width = 75;
-      console.log(this.robot.x, this.robot.y, "end")
       this.robot.setX(x);
       this.robot.setY(y);
     }
