@@ -41,7 +41,7 @@ export class GameComponent implements OnInit {
     };
   }
   ngOnInit() {
-    let game = new Game(this.config);
+    const game = new Game(this.config);
   }
 }
 
