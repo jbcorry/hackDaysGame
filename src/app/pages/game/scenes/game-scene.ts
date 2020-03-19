@@ -6,9 +6,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 export class GameScene extends Phaser.Scene {
+    private mainBack; middleBack; foregroundLayer; map;
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private platform: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private matrixBack; compChipBack; foregroundLayer; map;
     private tileset;
     public isJumping = false;
     public isFalling = false;
@@ -34,27 +33,11 @@ export class GameScene extends Phaser.Scene {
       this.lastPlatTime = 0;
     }
 
-    public spawnPlat(time: number) {
-        const promise = new Promise((resolve, reject) => {
-            const newPlatDiff: number = time - this.lastPlatTime;
-            const randomPlatTime = Math.floor(Math.random() * 1000);
-            if (newPlatDiff > this.delta && randomPlatTime > 800) {
-                this.lastPlatTime = time;
-                if (this.delta > 1000) {
-                this.delta -= 20;
-                }
-                this.newPlat();
-            }
-            resolve();
-        });
-        return promise;
-    }
-
     public preload() {
         this.load.tilemapTiledJSON('map', 'assets/map.json');
         this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
-        this.load.image('comp-chip', 'assets/images/computerchip.jpg');
-        this.load.image('matrix-back', 'assets/images/matrix-bg.jpg');
+        this.load.image('middle-bg', 'assets/images/middle-bg.png');
+        this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
     
         this.load.image('robo-idle', 'assets/images/player/robo-idle.svg');
@@ -62,17 +45,16 @@ export class GameScene extends Phaser.Scene {
         this.load.image('robo-back', 'assets/images/player/robo-back.svg');
         this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
         this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
-        this.load.image('plat-center', 'assets/images/platform-center.svg');
+        this.load.image('plat-center', 'assets/images/platform-center.png');
   
     }
     public create() {
+        let windowWidth = this.game.canvas.width;
+        let windowHeight = this.game.canvas.height;
         this.score = this.add.rectangle(0, 0, 0, 0, 0xFFFFFF) as any;
         this.score.depth = 0;
         this.physics.add.existing(this.score);
         this.score.body.collideWorldBounds = false;
-    
-        let windowWidth = window.innerWidth;
-        let windowHeight = window.innerHeight;
 
         //animations work
 
@@ -89,32 +71,42 @@ export class GameScene extends Phaser.Scene {
         this.robot.depth = 10;
         this.physics.add.existing(this.robot);
         this.robot.body.collideWorldBounds = true;
-        console.log(this.robot)
 
-        this.matrixBack = this.add.tileSprite(0, 0, windowWidth * 2, windowHeight, 'matrix-back');
-        this.matrixBack.depth = 0;
-        this.compChipBack = this.add.tileSprite(0, windowHeight, windowWidth * 2, windowHeight, 'comp-chip');
-        this.compChipBack.depth = 1;
-        this.foregroundLayer = this.add.tileSprite(100, windowHeight - 30, windowWidth * 2, 100, 'foregroundLayer');
-        this.foregroundLayer.depth = 2;
+        this.mainBack = this.add.tileSprite(windowWidth / 2, 0, windowWidth * 2, windowHeight, 'main-back');
+        this.mainBack.depth = 0;
+        this.mainBack.width = this.sys.canvas.width * 10;
+        this.mainBack.height = this.sys.canvas.height * 10;
+        this.mainBack.scaleX = .3;
+        this.mainBack.scaleY = .3;
+        this.middleBack = this.add.tileSprite(0, 1500, windowWidth, 500, 'middle-bg');
+        this.middleBack.width = this.sys.canvas.width * 10;
+        this.middleBack.height = this.sys.canvas.height * 10;
+        this.middleBack.scaleX = .3;
+        this.middleBack.scaleY = .3;
+        this.middleBack.depth = 1;
+        this.foregroundLayer = this.add.tileSprite(100, windowHeight - 30, windowWidth * 2, 80, 'foregroundLayer').setOrigin(1);
+        this.foregroundLayer.depth = 5;
+        this.physics.add.existing(this.foregroundLayer);
+        this.foregroundLayer.body.collideWorldBounds = true;
 
         this.platforms = this.add.group();
+
 
     }
     public update(time: number) {
   
-        this.physics.collide(this.robot, this.platform);
+        this.physics.collide(this.robot, this.platforms);
         this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
-          if (element.body.x == 0) {
-              element.setDisplaySize(element.body.width - 7, element.body.height);
-              if (element.body.width < 7) {
-                  this.platforms.remove(element);
-                  element.destroy();
-              }
-          }
-      });    
-    
+            if (element.body.x == 0 || element.body.x + element.body.width == this.game.config.width) {
+                element.setDisplaySize(element.body.width - 7, element.body.height);
+                if (element.body.width < 7) {
+                    this.platforms.remove(element);
+                    element.destroy();
+                }
+            }
+        });
+
         const cursorKeys = this.input.keyboard.createCursorKeys();
         
         //restart game
@@ -123,14 +115,6 @@ export class GameScene extends Phaser.Scene {
         }
 
         // // check jumping
-        // var jumpheight = window.innerHeight - this.robot.height + (this.robot.displayHeight / 2);
-        // if (this.robot.y < jumpheight && !this.robot.body.touching.down && !this.platform.body.touching.up) {
-        //     this.isJumping = true;
-        // } else {
-        //     this.isJumping = false;
-        // }
-        // check falling
-
         var goodY = Math.floor(this.robot.y);
         var jumpheight = window.innerHeight + 8 - this.robot.height;
         if(this.robot.body.touching.down || goodY > jumpheight){
@@ -140,24 +124,6 @@ export class GameScene extends Phaser.Scene {
           this.isFalling = true;
           this.isJumping = true;
         }
-        // if(this.lastSpriteY < goodY){
-        //   this.isFalling = true;
-        //   this.isJumping = true;
-        // } else if(this.lastSpriteY > goodY) {
-        //   this.isFalling = false;
-        //   this.isJumping = true;
-        // } else {
-        //   if(this.robot.body.touching.down || goodY > jumpheight){
-        //     console.log('OK ITS HERE')
-        //     console.log(this.robot.body.touching.down, goodY, jumpheight)
-        //     this.isFalling = false;
-        //     this.isJumping = false;
-        //   } else {
-        //     this.isFalling = true;
-        //     this.isJumping = true;
-        //   }
-        // }
-        // this.lastSpriteY = goodY
 
         //movement
         if (cursorKeys.right.isDown) {
@@ -167,9 +133,8 @@ export class GameScene extends Phaser.Scene {
         } else if (cursorKeys.up.isDown && !this.isJumping) {
             this.robot.body.setVelocityY(-500);
         } else {
-          this.score.body.setVelocityX(0);  
+          this.score.body.setVelocityX(0);
           this.robot.body.setVelocityX(0);
-          this.platform.body.setVelocityX(0);
           this.platforms.children.entries.forEach(element => {
               element.body.setVelocityX(0);
           });
@@ -181,7 +146,6 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
-        this.info.text = "SCORE: " + goodScore;
     }
 
     private GoRight(cursorKeys, time){
@@ -196,16 +160,15 @@ export class GameScene extends Phaser.Scene {
         this.robot.body.setVelocityY(-500);
       }
       if (this.robot.x >= 650) {
-        this.matrixBack.tilePositionX += .3;
-        this.compChipBack.tilePositionX += 1;
-        this.foregroundLayer.tilePositionX += 5;
+        this.mainBack.tilePositionX += .5;
+        this.middleBack.tilePositionX += 2;
+        this.foregroundLayer.tilePositionX += 8.3;
         this.score.body.setVelocityX(500);
         this.robot.body.setVelocityX(0);
-        this.platform.body.setVelocityX(-500);
         this.spawnPlat(time).then(() => {
-          this.platforms.children.entries.forEach(element => {
-              element.body.setVelocityX(-500);
-          });
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(-500);
+            });
         });
       }
     }
@@ -214,14 +177,14 @@ export class GameScene extends Phaser.Scene {
       this.score.body.setVelocityX(-500);  
       this.updateTexture('robo-back');
       this.robot.body.setVelocityX(-500);
-      
+
       this.platforms.children.entries.forEach(element => {
         element.body.setVelocityX(0);
       });
       if (this.robot.x <= 300) {
-        this.matrixBack.tilePositionX -= .3;
-        this.compChipBack.tilePositionX -= 1;
-        this.foregroundLayer.tilePositionX -= 5;
+        this.mainBack.tilePositionX -= .5;
+        this.middleBack.tilePositionX -= 2;
+        this.foregroundLayer.tilePositionX -= 8.3;
         this.score.body.setVelocityX(-500);
         this.robot.body.setVelocityX(0);
         
@@ -244,12 +207,40 @@ export class GameScene extends Phaser.Scene {
       this.robot.setX(x);
       this.robot.setY(y);
     }
+    public spawnPlat(time: number) {
+        const promise = new Promise((resolve, reject) => {
+            const newPlatDiff: number = time - this.lastPlatTime;
+            const randomPlatTime = Math.floor(Math.random() * 1000);
+            const platforms = this.platforms.children.entries;
+            let readyForPlat = true;
+            if (platforms.length > 1) {
+                const lastPlatPos = platforms[platforms.length - 1].body.x;
+                if (lastPlatPos >= this.game.canvas.width - 450) {
+                    readyForPlat = false;
+                } else {
+                    readyForPlat = true;
+                }
+            }
+            if (newPlatDiff > this.delta && randomPlatTime > 600 && readyForPlat == true) {
+                this.lastPlatTime = time;
+                if (this.delta > 1000) {
+                this.delta -= 20;
+                }
+                this.newPlat();
+            }
+            resolve();
+        });
+        return promise;
+    }
     private newPlat(): void {
-        // let plat: Phaser.Physics.Arcade.Image;
-        let plat: any;
-        let x = window.innerWidth + 100;
-        let y = window.innerHeight - 100;
+        let plat: Phaser.Physics.Arcade.Image;
+        let randomHeight = this.randomNumber(100, 240);
+        let randomWidth = this.randomNumber(100, 250);
+        let x = this.game.canvas.width;
+        let y = this.game.canvas.height;
         plat = this.physics.add.image(x, y, 'plat-center');
+        plat.depth = 3;
+        plat.setDisplaySize(randomWidth, randomHeight);
         plat.body.immovable = true;
         plat.depth = 10;
         plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
@@ -260,12 +251,11 @@ export class GameScene extends Phaser.Scene {
             const width = platforms[platforms.length - 1].body.width;
             const taller = this.randomNumber(0, 10);
             if (height < 200 && taller > 5) {
-                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(200, height + 200));
+                plat.setDisplaySize(randomWidth, this.randomNumber(240, height + 200));
             } else {
-                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+                plat.setDisplaySize(randomWidth, randomHeight);
             }
         }
-        console.log(platforms);
         this.plat = plat;
         this.plat.body.collideWorldBounds = true;
         this.platforms.add(plat);
@@ -275,4 +265,4 @@ export class GameScene extends Phaser.Scene {
     public randomNumber(min, max) {
         return Math.random() * (max - min) + min;
     }
-  }
+}
