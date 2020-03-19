@@ -6,6 +6,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class MainService {
 
+  score;
+  
   constructor(
     private firestore: AngularFirestore
     ) { }
