@@ -16,7 +16,8 @@ export class GameScene extends Phaser.Scene {
     public lastSpriteY = 0;
 
     //try robo sprite
-    private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
+    // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
+    private robot: any;
 
   
     delta: number;
@@ -254,7 +255,8 @@ export class GameScene extends Phaser.Scene {
       this.robot.setY(y);
     }
     private newPlat(): void {
-        let plat: Phaser.Physics.Arcade.Image;
+        // let plat: Phaser.Physics.Arcade.Image;
+        let plat: any;
         let x = window.innerWidth + 100;
         let y = window.innerHeight - 100;
         plat = this.physics.add.image(x, y, 'plat-center');
