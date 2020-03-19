@@ -9,7 +9,6 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 export class GameScene extends Phaser.Scene {
     private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private platform: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private ground: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private matrixBack; compChipBack; foregroundLayer; map;
     private tileset;
     public isJumping = false;
@@ -20,6 +19,11 @@ export class GameScene extends Phaser.Scene {
     starsFallen: number;
     sand: Phaser.Physics.Arcade.StaticGroup;
     info: Phaser.GameObjects.Text;
+    plat;
+    platforms;
+
+    lastPlatTime: number;
+
   
     constructor() {
       super(sceneConfig);
@@ -30,40 +34,35 @@ export class GameScene extends Phaser.Scene {
       this.lastStarTime = 0;
       this.starsCaught = 0;
       this.starsFallen = 0;
+      this.lastPlatTime = 0;
     }
 
-    //helper collide functions
-    public squareCollideWithPlatform(square, platform) {
-        if (square.body.touching.down && platform.body.touching.up) {
-            console.log('jump again');
-        }
+    public spawnPlat(time: number) {
+        const promise = new Promise((resolve, reject) => {
+            const newPlatDiff: number = time - this.lastPlatTime;
+            const randomPlatTime = Math.floor(Math.random() * 1000);
+            if (newPlatDiff > this.delta && randomPlatTime > 800) {
+                this.lastPlatTime = time;
+                if (this.delta > 1000) {
+                this.delta -= 20;
+                }
+                this.newPlat();
+            }
+            resolve();
+        });
+        return promise;
     }
 
-    public squareCollideWithGround() {
-        console.log('to the ground!');
-        this.square.body.y = window.innerHeight - 70;
-    }
-    public platCollideWithGround() {
-        console.log('to the ground!');
-        this.platform.y = window.innerHeight - 70;
-    }
-
-  
     public preload() {
-    
         this.load.tilemapTiledJSON('map', 'assets/map.json');
         this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
         this.load.image('comp-chip', 'assets/images/computerchip.jpg');
         this.load.image('matrix-back', 'assets/images/matrix-bg.jpg');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
-    
-        
         this.load.image('star', 'assets/images/star.png');
-  
+        this.load.image('plat-center', 'assets/images/platform-center.svg');
     }
     public create() {
-    
-    
         let windowWidth = window.innerWidth;
         let windowHeight = window.innerHeight;
         this.square = this.add.rectangle(200, windowHeight / 2 - 70, 100, 100, 0xFFFFFF) as any;
@@ -77,11 +76,6 @@ export class GameScene extends Phaser.Scene {
         this.platform.body.collideWorldBounds = true;
         this.platform.body.immovable = true;
 
-        this.ground = this.add.rectangle(0, windowHeight, windowWidth * 2, 70, 0xFFFFFF) as any;
-        this.ground.depth = 10;
-        this.physics.add.existing(this.ground);
-        this.ground.body.collideWorldBounds = true;
-
         this.matrixBack = this.add.tileSprite(0, 0, windowWidth * 2, windowHeight, 'matrix-back');
         this.matrixBack.depth = 0;
         this.compChipBack = this.add.tileSprite(0, windowHeight, windowWidth * 2, windowHeight, 'comp-chip');
@@ -91,18 +85,14 @@ export class GameScene extends Phaser.Scene {
     
         this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
   
+        this.platforms = this.add.group();
+
     }
     public update(time: number) {
   
-        this.physics.collide(this.square, this.platform, this.squareCollideWithPlatform, null, {
-            this: this,
-            square: this.square,
-            platform: this.platform
-        });
-        this.physics.collide(this.square, this.foregroundLayer, this.squareCollideWithGround);
-        this.physics.collide(this.platform, this.foregroundLayer, this.platCollideWithGround);
-
-
+        this.physics.collide(this.square, this.platform);
+        this.physics.collide(this.square, this.foregroundLayer);
+        this.physics.collide(this.platform, this.foregroundLayer);
 
         const diff: number = time - this.lastStarTime;
         if (diff > this.delta) {
@@ -134,24 +124,38 @@ export class GameScene extends Phaser.Scene {
             this.scene.restart();
         }
         if (cursorKeys.right.isDown) {
-    
+
             this.square.body.setVelocityX(500);
             this.platform.body.setVelocityX(0);
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(0);
+            });
 
             if (cursorKeys.up.isDown && !this.isJumping) {
-            this.square.body.setVelocityY(-500);
+                this.square.body.setVelocityY(-500);
             }
             if (this.square.x >= 650) {
-            this.matrixBack.tilePositionX += .3;
-            this.compChipBack.tilePositionX += 1;
-            this.foregroundLayer.tilePositionX += 5;
-            this.square.body.setVelocityX(0);
-            this.platform.body.setVelocityX(-500);
+                this.matrixBack.tilePositionX += .3;
+                this.compChipBack.tilePositionX += 1;
+                this.foregroundLayer.tilePositionX += 5;
+                this.square.body.setVelocityX(0);
+                this.platform.body.setVelocityX(-500);
+
+                this.spawnPlat(time).then(() => {
+                    this.platforms.children.entries.forEach(element => {
+                        element.body.setVelocityX(-500);
+                    });
+                });
+
 
             }
         } else if (cursorKeys.left.isDown) {
             this.square.body.setVelocityX(-500);
             this.platform.body.setVelocityX(0);
+
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(0);
+            });
 
             if (this.square.x <= 300) {
             this.matrixBack.tilePositionX -= .3;
@@ -159,6 +163,10 @@ export class GameScene extends Phaser.Scene {
             this.foregroundLayer.tilePositionX -= 5;
             this.square.body.setVelocityX(0);
             this.platform.body.setVelocityX(500);
+
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(500);
+            });
             }
             if (cursorKeys.up.isDown && !this.isJumping) {
             this.square.body.setVelocityY(-500);
@@ -168,9 +176,12 @@ export class GameScene extends Phaser.Scene {
         } else {
             this.square.body.setVelocityX(0);
             this.platform.body.setVelocityX(0);
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(0);
+            });
         }
     }
-  
+    
     private onClick(star: Phaser.Physics.Arcade.Image): () => void {
       return function() {
         star.setTint(0x00ff00);
@@ -200,5 +211,33 @@ export class GameScene extends Phaser.Scene {
       star.setInteractive();
       star.on('pointerdown', this.onClick(star), this);
       this.physics.add.collider(star, this.sand, this.onFall(star), null, this);
+    }
+    private newPlat(): void {
+        let plat: Phaser.Physics.Arcade.Image;
+        let x = window.innerWidth + 100;
+        let y = window.innerHeight - 100;
+        plat = this.physics.add.image(x, y, 'plat-center');
+        plat.body.collideWorldBounds = true;
+        plat.body.immovable = true;
+        plat.depth = 10;
+        plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+        this.physics.add.collider(plat, this.square);
+        const platforms = this.platforms.children.entries;
+        if (platforms.length > 1) {
+            const height = platforms[platforms.length - 1].body.height;
+            const width = platforms[platforms.length - 1].body.width;
+            const taller = this.randomNumber(0, 10);
+            if (height < 200 && taller > 5) {
+                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(220, height + 220));
+            } else {
+                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+            }
+        }
+        this.platforms.add(plat);
+      }
+
+    // Function to generate random number
+    public randomNumber(min, max) {
+        return Math.random() * (max - min) + min;
     }
   }
