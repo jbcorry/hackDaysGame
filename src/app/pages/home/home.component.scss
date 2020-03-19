@@ -1,7 +1,10 @@
 p {
   font-family: "Inconsolata", monospace;
+  font-style: normal;
+  font-weight: bold;
   font-size: 24px;
-  letter-spacing: 2px;
+  line-height: 140%;
+  letter-spacing: 0.11em;
 }
 li {
   font-family: "Exo 2", sans-serif;
@@ -15,8 +18,11 @@ h5 {
 }
 
 h1 {
-    font-family: "Exo 2", sans-serif;
-  font-size: 65px;
-  letter-spacing: 5px;
-  text-shadow: 0 0 10px #00B0CC;
+  font-family: "Exo 2", sans-serif;
+  font-size: 68px;
+  line-height: 140%;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #00e0ff;
+  text-shadow: 0px 0px 12px #00e0ff;
 }
