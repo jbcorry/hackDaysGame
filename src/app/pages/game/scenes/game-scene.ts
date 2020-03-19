@@ -84,9 +84,9 @@ export class GameScene extends Phaser.Scene {
         this.middleBack.scaleX = .3;
         this.middleBack.scaleY = .3;
         this.middleBack.depth = 1;
-        this.foregroundLayer = this.add.tileSprite(100, windowHeight - 30, windowWidth * 2, 80, 'foregroundLayer').setOrigin(1);
+        this.foregroundLayer = this.add.tileSprite(0, windowHeight - 30, windowWidth * 2, 80, 'foregroundLayer');
         this.foregroundLayer.depth = 5;
-        this.physics.add.existing(this.foregroundLayer);
+        this.physics.add.existing(this.foregroundLayer, true);
         this.foregroundLayer.body.collideWorldBounds = true;
 
         this.platforms = this.add.group();
@@ -149,7 +149,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     private GoRight(cursorKeys, time){
-      this.score.body.setVelocityX(500);  
+      this.score.body.setVelocityX(500);
       this.updateTexture('robo-forward');
       this.robot.body.setVelocityX(500);
       
@@ -242,8 +242,7 @@ export class GameScene extends Phaser.Scene {
         plat.depth = 3;
         plat.setDisplaySize(randomWidth, randomHeight);
         plat.body.immovable = true;
-        plat.depth = 10;
-        plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+        plat.setDisplaySize(this.randomNumber(100, 250), this.randomNumber(100, 220));
         this.physics.add.collider(plat, this.robot);
         const platforms = this.platforms.children.entries;
         if (platforms.length > 1) {
