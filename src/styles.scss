@@ -1,12 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 
-
+body {
+  background-color: #000;
+  color: #00e0ff;
+  text-transform: uppercase;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Inconsolata", monospace;
+}
+p {
+  font-family: "Exo 2", sans-serif;
+}
 // font-family: 'Inconsolata', monospace;
 // font-family: 'Exo 2', sans-serif;
 
-.inco{
-    font-family: 'Inconsolata', monospace;
+.inco {
+  font-family: "Inconsolata", monospace;
 }
-.exo{
-    font-family: 'Exo 2', sans-serif;
+.exo {
+  font-family: "Exo 2", sans-serif;
 }
