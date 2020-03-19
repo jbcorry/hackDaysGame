@@ -1,58 +1,9 @@
-body {
-  font-family: Arial, Helvetica, sans-serif;
+.nav-link {
+  color: #00E0FF!important;
+  font-family: "Inconsolata", monospace;
   font-size: 16px;
+  margin-left: 15px;
 }
-p {
-  color: #000;
-  font-size: 1em;
-}
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #555;
-  text-transform: uppercase;
-}
-.navbar-brand span {
-  color: #0000ff;
-  font-size: 25px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.navbar-brand {
-  color: #0000ff;
-  font-size: 25px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.navbar-nav .nav-item .nav-link {
-  color: #000;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.navbar-nav .nav-item .nav-link:hover {
-  color: #555;
-}
-.navbar-expand-md .navbar-nav .dropdown-menu {
-  border-top: 3px solid #555;
-}
-.dropdown-item:hover {
-  background-color: #555;
-  color: #fff;
-}
-nav {
-  -webkit-transition: padding-top 0.3s, padding-bottom 0.3s;
-  -moz-transition: padding-top 0.3s, padding-bottom 0.3s;
-  transition: padding-top 0.3s, padding-bottom 0.3s;
-  border: none;
-}
-
-.shrink {
-  padding-top: 0;
-  padding-bottom: 0;
-  background-color: #212529;
+.nav-link:hover {
+  color:#00B0DD!important;
 }
