@@ -1,4 +1,3 @@
-import { Platform } from '../objects/platform';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
@@ -16,30 +15,22 @@ export class GameScene extends Phaser.Scene {
     public lastSpriteY = 0;
 
     //try robo sprite
-    private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
+    // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
+    private robot: any;
 
   
     delta: number;
-    lastStarTime: number;
-    starsCaught: number;
-    starsFallen: number;
-    sand: Phaser.Physics.Arcade.StaticGroup;
+    lastPlatTime: number;
     info: Phaser.GameObjects.Text;
     plat;
     platforms;
 
-    lastPlatTime: number;
-
-  
     constructor() {
       super(sceneConfig);
     }
   
     init(params): void {
       this.delta = 1000;
-      this.lastStarTime = 0;
-      this.starsCaught = 0;
-      this.starsFallen = 0;
       this.lastPlatTime = 0;
     }
 
@@ -100,21 +91,13 @@ export class GameScene extends Phaser.Scene {
         this.robot.body.collideWorldBounds = true;
         console.log(this.robot)
 
-        this.platform = this.add.rectangle(windowWidth, windowHeight - 70, 100, 200, 0xFFFFFF) as any;
-        this.platform.depth = 10;
-        this.physics.add.existing(this.platform);
-        this.platform.body.collideWorldBounds = true;
-        this.platform.body.immovable = true;
-
         this.matrixBack = this.add.tileSprite(0, 0, windowWidth * 2, windowHeight, 'matrix-back');
         this.matrixBack.depth = 0;
         this.compChipBack = this.add.tileSprite(0, windowHeight, windowWidth * 2, windowHeight, 'comp-chip');
         this.compChipBack.depth = 1;
         this.foregroundLayer = this.add.tileSprite(100, windowHeight - 30, windowWidth * 2, 100, 'foregroundLayer');
         this.foregroundLayer.depth = 2;
-    
-        this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
-  
+
         this.platforms = this.add.group();
 
     }
@@ -122,7 +105,15 @@ export class GameScene extends Phaser.Scene {
   
         this.physics.collide(this.robot, this.platform);
         this.physics.collide(this.robot, this.foregroundLayer);
-        this.physics.collide(this.platform, this.foregroundLayer);    
+        this.platforms.children.entries.forEach(element => {
+          if (element.body.x == 0) {
+              element.setDisplaySize(element.body.width - 7, element.body.height);
+              if (element.body.width < 7) {
+                  this.platforms.remove(element);
+                  element.destroy();
+              }
+          }
+      });    
     
         const cursorKeys = this.input.keyboard.createCursorKeys();
         
@@ -197,7 +188,7 @@ export class GameScene extends Phaser.Scene {
       this.score.body.setVelocityX(500);  
       this.updateTexture('robo-forward');
       this.robot.body.setVelocityX(500);
-      this.platform.body.setVelocityX(0);
+      
       this.platforms.children.entries.forEach(element => {
         element.body.setVelocityX(0);
       });
@@ -223,7 +214,7 @@ export class GameScene extends Phaser.Scene {
       this.score.body.setVelocityX(-500);  
       this.updateTexture('robo-back');
       this.robot.body.setVelocityX(-500);
-      this.platform.body.setVelocityX(0);
+      
       this.platforms.children.entries.forEach(element => {
         element.body.setVelocityX(0);
       });
@@ -233,7 +224,7 @@ export class GameScene extends Phaser.Scene {
         this.foregroundLayer.tilePositionX -= 5;
         this.score.body.setVelocityX(-500);
         this.robot.body.setVelocityX(0);
-        this.platform.body.setVelocityX(500);
+        
         this.platforms.children.entries.forEach(element => {
           element.body.setVelocityX(500);
         });
@@ -254,11 +245,11 @@ export class GameScene extends Phaser.Scene {
       this.robot.setY(y);
     }
     private newPlat(): void {
-        let plat: Phaser.Physics.Arcade.Image;
+        // let plat: Phaser.Physics.Arcade.Image;
+        let plat: any;
         let x = window.innerWidth + 100;
         let y = window.innerHeight - 100;
         plat = this.physics.add.image(x, y, 'plat-center');
-        plat.body.collideWorldBounds = true;
         plat.body.immovable = true;
         plat.depth = 10;
         plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
@@ -269,11 +260,14 @@ export class GameScene extends Phaser.Scene {
             const width = platforms[platforms.length - 1].body.width;
             const taller = this.randomNumber(0, 10);
             if (height < 200 && taller > 5) {
-                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(220, height + 220));
+                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(200, height + 200));
             } else {
                 plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
             }
         }
+        console.log(platforms);
+        this.plat = plat;
+        this.plat.body.collideWorldBounds = true;
         this.platforms.add(plat);
       }
 
