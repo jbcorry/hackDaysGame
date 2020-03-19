@@ -8,9 +8,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class GameScene extends Phaser.Scene {
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private square: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private platform: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private ground: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private matrixBack; compChipBack; foregroundLayer; map;
     private tileset;
     public isJumping = false;
@@ -27,6 +25,11 @@ export class GameScene extends Phaser.Scene {
     starsFallen: number;
     sand: Phaser.Physics.Arcade.StaticGroup;
     info: Phaser.GameObjects.Text;
+    plat;
+    platforms;
+
+    lastPlatTime: number;
+
   
     constructor() {
       super(sceneConfig);
@@ -37,27 +40,26 @@ export class GameScene extends Phaser.Scene {
       this.lastStarTime = 0;
       this.starsCaught = 0;
       this.starsFallen = 0;
+      this.lastPlatTime = 0;
     }
 
-    //helper collide functions
-    public squareCollideWithPlatform(square, platform) {
-        if (square.body.touching.down && platform.body.touching.up) {
-            console.log('jump again');
-        }
+    public spawnPlat(time: number) {
+        const promise = new Promise((resolve, reject) => {
+            const newPlatDiff: number = time - this.lastPlatTime;
+            const randomPlatTime = Math.floor(Math.random() * 1000);
+            if (newPlatDiff > this.delta && randomPlatTime > 800) {
+                this.lastPlatTime = time;
+                if (this.delta > 1000) {
+                this.delta -= 20;
+                }
+                this.newPlat();
+            }
+            resolve();
+        });
+        return promise;
     }
 
-    public squareCollideWithGround() {
-        console.log('to the ground!');
-        this.square.body.y = window.innerHeight - 70;
-    }
-    public platCollideWithGround() {
-        console.log('to the ground!');
-        this.platform.y = window.innerHeight - 70;
-    }
-
-  
     public preload() {
-    
         this.load.tilemapTiledJSON('map', 'assets/map.json');
         this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
         this.load.image('comp-chip', 'assets/images/computerchip.jpg');
@@ -69,6 +71,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('robo-back', 'assets/images/player/robo-back.svg');
         this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
         this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
+        this.load.image('plat-center', 'assets/images/platform-center.svg');
   
     }
     public create() {
@@ -80,12 +83,18 @@ export class GameScene extends Phaser.Scene {
         let windowWidth = window.innerWidth;
         let windowHeight = window.innerHeight;
 
+        //animations work
+
+        this.anims.create({
+          
+        })
+
         //robo sprite
         this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward');
         this.robot.setTexture('robo-idle');
         this.robot.height = 100;
         this.robot.width = 75;
-        this.robot.setDisplaySize(75,100)
+        this.robot.setDisplaySize(75,100);
         this.robot.depth = 10;
         this.physics.add.existing(this.robot);
         this.robot.body.collideWorldBounds = true;
@@ -97,11 +106,6 @@ export class GameScene extends Phaser.Scene {
         this.platform.body.collideWorldBounds = true;
         this.platform.body.immovable = true;
 
-        // this.ground = this.add.rectangle(0, windowHeight, windowWidth * 2, 70, 0xFFFFFF) as any;
-        // this.ground.depth = 10;
-        // this.physics.add.existing(this.ground);
-        // this.ground.body.collideWorldBounds = true;
-
         this.matrixBack = this.add.tileSprite(0, 0, windowWidth * 2, windowHeight, 'matrix-back');
         this.matrixBack.depth = 0;
         this.compChipBack = this.add.tileSprite(0, windowHeight, windowWidth * 2, windowHeight, 'comp-chip');
@@ -111,16 +115,14 @@ export class GameScene extends Phaser.Scene {
     
         this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
   
+        this.platforms = this.add.group();
+
     }
     public update(time: number) {
   
-        this.physics.collide(this.robot, this.platform, this.squareCollideWithPlatform, null, {
-            this: this,
-            square: this.robot,
-            platform: this.platform
-        });
-        this.physics.collide(this.robot, this.foregroundLayer, this.squareCollideWithGround);
-        this.physics.collide(this.platform, this.foregroundLayer, this.platCollideWithGround);
+        this.physics.collide(this.robot, this.platform);
+        this.physics.collide(this.robot, this.foregroundLayer);
+        this.physics.collide(this.platform, this.foregroundLayer);    
     
         const cursorKeys = this.input.keyboard.createCursorKeys();
         
@@ -139,27 +141,36 @@ export class GameScene extends Phaser.Scene {
         // check falling
 
         var goodY = Math.floor(this.robot.y);
-        console.log(this.lastSpriteY, goodY, this.isFalling)
-        if(this.lastSpriteY < goodY){
+        var jumpheight = window.innerHeight + 8 - this.robot.height;
+        if(this.robot.body.touching.down || goodY > jumpheight){
+          this.isFalling = false;
+          this.isJumping = false;
+        } else {
           this.isFalling = true;
           this.isJumping = true;
-        } else if(this.lastSpriteY > goodY) {
-          this.isFalling = false;
-          this.isJumping = true;
-        } else {
-          if(goodY > 540){
-            this.isFalling = false;
-            this.isJumping = false;
-          } else {
-            this.isFalling = true;
-            this.isJumping = true;
-          }
         }
-        this.lastSpriteY = goodY
+        // if(this.lastSpriteY < goodY){
+        //   this.isFalling = true;
+        //   this.isJumping = true;
+        // } else if(this.lastSpriteY > goodY) {
+        //   this.isFalling = false;
+        //   this.isJumping = true;
+        // } else {
+        //   if(this.robot.body.touching.down || goodY > jumpheight){
+        //     console.log('OK ITS HERE')
+        //     console.log(this.robot.body.touching.down, goodY, jumpheight)
+        //     this.isFalling = false;
+        //     this.isJumping = false;
+        //   } else {
+        //     this.isFalling = true;
+        //     this.isJumping = true;
+        //   }
+        // }
+        // this.lastSpriteY = goodY
 
         //movement
         if (cursorKeys.right.isDown) {
-          this.GoRight(cursorKeys);
+          this.GoRight(cursorKeys, time);
         } else if (cursorKeys.left.isDown) {
           this.GoLeft(cursorKeys);
         } else if (cursorKeys.up.isDown && !this.isJumping) {
@@ -168,10 +179,13 @@ export class GameScene extends Phaser.Scene {
           this.score.body.setVelocityX(0);  
           this.robot.body.setVelocityX(0);
           this.platform.body.setVelocityX(0);
+          this.platforms.children.entries.forEach(element => {
+              element.body.setVelocityX(0);
+          });
           if(this.isJumping){
-            this.robot.setTexture('robo-jump');
+            this.updateTexture('robo-jump');
           } else {
-            this.robot.setTexture('robo-idle');
+            this.updateTexture('robo-idle');
           }
         }
         //set Score
@@ -179,11 +193,14 @@ export class GameScene extends Phaser.Scene {
         this.info.text = "SCORE: " + goodScore;
     }
 
-    private GoRight(cursorKeys){
+    private GoRight(cursorKeys, time){
       this.score.body.setVelocityX(500);  
+      this.updateTexture('robo-forward');
       this.robot.body.setVelocityX(500);
-      this.robot.setTexture('robo-forward');
       this.platform.body.setVelocityX(0);
+      this.platforms.children.entries.forEach(element => {
+        element.body.setVelocityX(0);
+      });
       if (cursorKeys.up.isDown && !this.isJumping) {
         this.robot.body.setVelocityY(-500);
       }
@@ -194,14 +211,22 @@ export class GameScene extends Phaser.Scene {
         this.score.body.setVelocityX(500);
         this.robot.body.setVelocityX(0);
         this.platform.body.setVelocityX(-500);
+        this.spawnPlat(time).then(() => {
+          this.platforms.children.entries.forEach(element => {
+              element.body.setVelocityX(-500);
+          });
+        });
       }
     }
 
     private GoLeft(cursorKeys){
       this.score.body.setVelocityX(-500);  
+      this.updateTexture('robo-back');
       this.robot.body.setVelocityX(-500);
-      this.robot.setTexture('robo-back');
       this.platform.body.setVelocityX(0);
+      this.platforms.children.entries.forEach(element => {
+        element.body.setVelocityX(0);
+      });
       if (this.robot.x <= 300) {
         this.matrixBack.tilePositionX -= .3;
         this.compChipBack.tilePositionX -= 1;
@@ -209,9 +234,51 @@ export class GameScene extends Phaser.Scene {
         this.score.body.setVelocityX(-500);
         this.robot.body.setVelocityX(0);
         this.platform.body.setVelocityX(500);
+        this.platforms.children.entries.forEach(element => {
+          element.body.setVelocityX(500);
+        });
       }
       if (cursorKeys.up.isDown && !this.isJumping) {
         this.robot.body.setVelocityY(-500);
       }
+    }
+    private updateTexture(texture){
+      console.log(this.robot.x, this.robot.y, "start")
+      var x = this.robot.x;
+      var y = this.robot.y;
+      this.robot.setTexture(texture);
+      this.robot.height = 100;
+      this.robot.width = 75;
+      console.log(this.robot.x, this.robot.y, "end")
+      this.robot.setX(x);
+      this.robot.setY(y);
+    }
+    private newPlat(): void {
+        let plat: Phaser.Physics.Arcade.Image;
+        let x = window.innerWidth + 100;
+        let y = window.innerHeight - 100;
+        plat = this.physics.add.image(x, y, 'plat-center');
+        plat.body.collideWorldBounds = true;
+        plat.body.immovable = true;
+        plat.depth = 10;
+        plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+        this.physics.add.collider(plat, this.robot);
+        const platforms = this.platforms.children.entries;
+        if (platforms.length > 1) {
+            const height = platforms[platforms.length - 1].body.height;
+            const width = platforms[platforms.length - 1].body.width;
+            const taller = this.randomNumber(0, 10);
+            if (height < 200 && taller > 5) {
+                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(220, height + 220));
+            } else {
+                plat.setDisplaySize(this.randomNumber(50, 250), this.randomNumber(60, 220));
+            }
+        }
+        this.platforms.add(plat);
+      }
+
+    // Function to generate random number
+    public randomNumber(min, max) {
+        return Math.random() * (max - min) + min;
     }
   }
