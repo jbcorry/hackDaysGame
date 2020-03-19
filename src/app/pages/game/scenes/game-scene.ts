@@ -74,7 +74,11 @@ export class GameScene extends Phaser.Scene {
 
         this.platforms.children.entries.forEach(element => {
             if (element.body.x == 0) {
-                element.destroy();
+                element.setDisplaySize(element.body.width - 7, element.body.height);
+                if (element.body.width < 7) {
+                    this.platforms.remove(element);
+                    element.destroy();
+                }
             }
         });
 
