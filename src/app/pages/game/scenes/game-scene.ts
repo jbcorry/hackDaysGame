@@ -8,7 +8,6 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 export class GameScene extends Phaser.Scene {
     private mainBack; middleBack; foregroundLayer; map;
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
-    private tileset;
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
@@ -35,7 +34,6 @@ export class GameScene extends Phaser.Scene {
 
     public preload() {
         this.load.tilemapTiledJSON('map', 'assets/map.json');
-        this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 70, frameHeight: 70});
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
