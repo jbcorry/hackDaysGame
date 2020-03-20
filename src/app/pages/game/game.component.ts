@@ -75,7 +75,8 @@ export class GameComponent implements OnInit {
   sendScore(){
       var score = {
         username: this.userData.username,
-        score: this.score
+        score: this.score,
+        time: this.userData.time
       }
       console.log('this is sending to the datatbase', score)
       this.mainService.createScore(score);
