@@ -21,12 +21,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr *ngFor="let score of scores | orderBy: 'score.payload.doc.data().score'; let i=index"> -->
-                    <tr *ngFor="let score of scores; let i=index">
+                  <tr *ngFor="let score of scores | orderScore: 'score'; let i = index">
                     <th scope="row">{{i + 1}}</th>
-                    <td>{{score.payload.doc.data().score}}</td>
-                    <td>{{score.payload.doc.data().username}}</td>
-                    </tr>
+                    <td>{{score.score}}</td>
+                    <td>{{score.username}}</td>
+                  </tr>
                 </tbody>
             </table>
         </div>

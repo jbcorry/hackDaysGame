@@ -8,17 +8,19 @@ import { MainService } from 'src/app/services/main.service';
 })
 export class LeaderboardComponent implements OnInit {
 
-  scores: any = [];
+  scores = [];
 
-  constructor(private mainService: MainService) {
-  }
+  constructor(private mainService: MainService) { }
 
   ngOnInit() {
-    // console.log(this.mainService.getScores());
-    this.mainService.getScores().subscribe((data) => {
-      this.scores = data;
-    });
-    
+    this.mainService.getScores().subscribe((data)=>{
+      var goodData = [];
+      data.map((val:any)=>{
+        val = val.payload.doc.data();
+        goodData.push(val);
+      })
+      this.scores = goodData;
+    })
   }
 
 }
