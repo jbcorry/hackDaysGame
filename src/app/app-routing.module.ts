@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { GameComponent } from './pages/game/game.component';
 import { HowToPlayComponent } from './pages/howToPlay/howToPlay.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { GameoverComponent } from './pages/gameover/gameover.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'howToPlay', component: HowToPlayComponent },
   { path: 'leaderboard', component: LeaderboardComponent },
+  { path: 'gameover', component: GameoverComponent }
 
 ];
 

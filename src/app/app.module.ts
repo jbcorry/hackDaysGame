@@ -18,6 +18,7 @@ import { FooterComponent } from './templates/footer/footer.component';
 import { HowToPlayComponent } from './pages/howToPlay/howToPlay.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 import { OrderScore } from './new-pipe.pipe';
+import { GameoverComponent } from './pages/gameover/gameover.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { OrderScore } from './new-pipe.pipe';
     FooterComponent,
     HowToPlayComponent,
     LeaderboardComponent,
-    OrderScore
+    OrderScore,
+    GameoverComponent
   ],
   imports: [
     BrowserModule,
