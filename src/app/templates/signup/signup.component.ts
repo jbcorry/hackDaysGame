@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MainService } from 'src/app/services/main.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -9,17 +9,23 @@ import { MainService } from 'src/app/services/main.service';
 export class SignupComponent implements OnInit {
 
   timeSelect = 2;
+  username = "";
   
   constructor(
-    private mainService: MainService
+    private router: Router
   ) { }
 
   ngOnInit() {
   }
 
-  addScore(){
-    var score = {}
-    this.mainService.createScore(score);
+  goToGame(){
+    if(this.username){
+      var data = {
+        username: this.username,
+        time: this.timeSelect
+      }
+      this.router.navigate(['/game'], {state: {data}});
+    }
   }
 
 }
