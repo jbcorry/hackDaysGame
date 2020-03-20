@@ -76,13 +76,13 @@ export class GameScene extends Phaser.Scene {
         var bigtext = { font: '45px Inconsolata', fill: '#41E0FF' };
         var smalltext = { font: '16px "Exo 2"', fill: '#41E0FF' };
         this.userinfo = this.add.text(350, 90, '', bigtext);
-        this.timeInfo = this.add.text(160, 90, '', bigtext);
+        this.timeInfo = this.add.text(180, 90, '', bigtext);
         this.userTitle = this.add.text(350, 60, '', smalltext);
-        this.timeTitle = this.add.text(160, 60, '', smalltext);
-        this.userTitle.setShadow(1, 1, '#41E0FF', 10);
-        this.timeTitle.setShadow(1, 1, '#41E0FF', 10)
-        this.userinfo.setShadow(3, 3, '#41E0FF', 5);
-        this.timeInfo.setShadow(3, 3, '#41E0FF', 5);
+        this.timeTitle = this.add.text(180, 60, '', smalltext);
+        // this.userTitle.setShadow(1, 1, '#41E0FF', 3);
+        // this.timeTitle.setShadow(1, 1, '#41E0FF', 3);
+        // this.userinfo.setShadow(2, 2, '#41E0FF', 3);
+        // this.timeInfo.setShadow(2, 2, '#41E0FF', 3);
         this.userinfo.depth = 10;
         this.timeInfo.depth = 10;
         this.userTitle.depth = 10;
