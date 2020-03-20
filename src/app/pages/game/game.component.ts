@@ -6,6 +6,7 @@ import { GameOverScene } from "./scenes/game-over-scene";
 
 import { RouterOutlet, Router } from '@angular/router';
 import { MainService } from 'src/app/services/main.service';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -65,15 +66,34 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     var data = {poop: "poopy"};
     const game = new Game(this.config , data);
-    game.isRunning
-    setTimeout(()=>{
-      var score = game.scene.scenes[0].scoreNumber;
-      this.score = score.text;
-      if(this.score !== "Loading..."){
-        this.sendScore();
+    console.log(game.isRunning)
+    const promiseA = new Promise( (res,rej) => {
+      if(game.isRunning){
+        res();
+      } else {
+        promiseReturn(res);
       }
-      game.scene.stop('Game');
-    }, (this.structuredTime * 1000) + 3000);
+    });
+    function promiseReturn(res){
+      setTimeout(()=>{
+        if(game.isRunning){
+          return res();
+        } else {
+          promiseReturn(res);
+        }
+      },500)
+    }
+    promiseA.then(()=>{
+      console.log('game ready')
+      setTimeout(()=>{
+        var score = game.scene.scenes[0].scoreNumber;
+        this.score = score.text;
+        if(this.score !== "Loading..."){
+          this.sendScore();
+        }
+        game.scene.stop('Game');
+      }, (this.structuredTime * 1000) + 1000);
+    })
   }
 
   sendScore(){
