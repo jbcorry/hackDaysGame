@@ -6,6 +6,9 @@ p {
   line-height: 140%;
   letter-spacing: 0.11em;
 }
+p.leaderboard-select {
+  font-size: 14px !important;
+}
 li {
   font-family: "Exo 2", sans-serif;
 }
@@ -40,4 +43,29 @@ table {
 .table-hover tbody tr:hover td,
 .table-hover tbody tr:hover th {
   background-color: #00a0bb;
+}
+button {
+  display: inline-block;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: "Exo 2", sans-serif;
+  letter-spacing: 0.11em;
+  color: #00e0ff;
+  border: 2px solid #00e0ff;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: ease 0.3s;
+  &.active {
+    background-color: #0f373d;
+  }
+}
+
+button:hover {
+  background: #0f373d;
+  color: #00b0cc;
 }
