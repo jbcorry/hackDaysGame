@@ -17,6 +17,7 @@ import { HeaderComponent } from './templates/header/header.component';
 import { FooterComponent } from './templates/footer/footer.component';
 import { HowToPlayComponent } from './pages/howToPlay/howToPlay.component';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
+import { OrderScore } from './new-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component'
     HeaderComponent,
     FooterComponent,
     HowToPlayComponent,
-    LeaderboardComponent
+    LeaderboardComponent,
+    OrderScore
   ],
   imports: [
     BrowserModule,

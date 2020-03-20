@@ -21,25 +21,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
+                  <tr *ngFor="let score of scores | orderScore: 'score'; let i = index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{score.score}}</td>
+                    <td>{{score.username}}</td>
                   </tr>
                 </tbody>
               </table>
