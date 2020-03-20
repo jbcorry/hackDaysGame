@@ -66,10 +66,8 @@ export class GameComponent implements OnInit {
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
       this.score = score.text;
-      alert("Your score is: " + score.text + ' NOW GET BACK TO WORK NERD!');
       this.sendScore();
-      this.router.navigate(['/']);
-    }, timeToPlay)
+    }, timeToPlay);
   }
 
   sendScore(){

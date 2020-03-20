@@ -12,7 +12,7 @@ export class GameScene extends Phaser.Scene {
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
-    private userInfo: Phaser.GameObjects.Text;
+    private info: Phaser.GameObjects.Text;
     private timeInfo: Phaser.GameObjects.Text;
     private user: any;
     private timeRemaining: any;
@@ -64,6 +64,8 @@ export class GameScene extends Phaser.Scene {
         this.score.body.collideWorldBounds = false;
         this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
         this.info.depth = 10;
+        this.timeInfo = this.add.text(10, 40, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
+        this.timeInfo.depth = 10;
         this.scoreNumber = this.add.text(0, 0, '', { font: '1px Arial Bold', fill: '#FBFBAC' });
 
 
@@ -151,10 +153,13 @@ export class GameScene extends Phaser.Scene {
         //set Score
         var goodScore = Math.floor(this.score.x / 50);
         this.scoreNumber.text = goodScore.toString();
-        this.userInfo.text = this.user + "'s score: " + goodScore; 
+        this.timeRemaining -= 1 / 60;
+
+        this.info.text = this.user + "'s score: " + goodScore; 
         this.timeInfo.text = "Time Remaining: " + Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';
+            this.scene.restart();
             this.scene.stop('Game');
         }
     }
