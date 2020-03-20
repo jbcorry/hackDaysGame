@@ -56,11 +56,11 @@ export class GameScene extends Phaser.Scene {
         this.load.image('matrix-back', 'assets/images/matrix-bg.jpg');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
     
-        this.load.image('robo-idle', 'assets/images/player/robo-idle.svg');
-        this.load.image('robo-jump', 'assets/images/player/robo-jump.svg');
-        this.load.image('robo-back', 'assets/images/player/robo-back.svg');
-        this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
-        this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
+        this.load.image('robo-idle', 'assets/images/player/robo-idle.png');
+        this.load.image('robo-jump', 'assets/images/player/robo-jump.png');
+        this.load.image('robo-back', 'assets/images/player/robo-back.png');
+        this.load.image('robo-forward', 'assets/images/player/robo-forward.png');
+        this.load.image('robo-spring', 'assets/images/player/robo-spring.png');
         this.load.image('plat-center', 'assets/images/platform-center.svg');
   
     }
