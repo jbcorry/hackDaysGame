@@ -74,6 +74,10 @@ export class GameScene extends Phaser.Scene {
         this.timeInfo = this.add.text(60, 90, '', bigtext);
         this.userTitle = this.add.text(250, 60, '', smalltext);
         this.timeTitle = this.add.text(60, 60, '', smalltext);
+        this.userTitle.setShadow(1, 1, '#41E0FF', 10);
+        this.timeTitle.setShadow(1, 1, '#41E0FF', 10)
+        this.userinfo.setShadow(3, 3, '#41E0FF', 5);
+        this.timeInfo.setShadow(3, 3, '#41E0FF', 5)
         this.userinfo.depth = 10;
         this.timeInfo.depth = 10;
         this.userTitle.depth = 10;
