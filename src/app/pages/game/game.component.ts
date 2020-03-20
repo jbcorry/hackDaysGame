@@ -33,7 +33,8 @@ export class GameComponent implements OnInit {
     // state ? this.userData = state.data : this.router.navigate(['/']);
     //for testing
     state ? this.userData = state.data : "";
-    this.structuredTime = (parseInt(this.userData.time) * 60).toString();
+    // this.structuredTime = (parseInt(this.userData.time) * 60).toString();
+    this.structuredTime = 10;
 
     this.config = {
       title: 'Deploy Game',
