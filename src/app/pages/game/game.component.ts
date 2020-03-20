@@ -70,7 +70,7 @@ export class GameComponent implements OnInit {
       if(this.score !== "Loading..."){
         this.sendScore();
       }
-    }, this.structuredTime * 1000);
+    }, (this.structuredTime * 1000) + 3000);
   }
 
   sendScore(){
