@@ -14,35 +14,21 @@
         <div class="col-sm-12 col-md-7 p-4 mx-3 mb-5 card">
             <table class="table table-hover table-borderless">
                 <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Name</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Name</th>
+                    </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>1024</td>
-                    <td>Pee Pee Poo Poo</td>
-                  </tr>
+                    <!-- <tr *ngFor="let score of scores | orderBy: 'score.payload.doc.data().score'; let i=index"> -->
+                    <tr *ngFor="let score of scores; let i=index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{score.payload.doc.data().score}}</td>
+                    <td>{{score.payload.doc.data().username}}</td>
+                    </tr>
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 </div>
