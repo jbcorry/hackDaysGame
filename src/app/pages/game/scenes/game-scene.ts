@@ -184,7 +184,6 @@ export class GameScene extends Phaser.Scene {
         this.timeInfo.text = ""+Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';
-            this.scene.restart();
             this.scene.stop('Game');
         }
     }
