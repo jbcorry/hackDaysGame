@@ -184,57 +184,68 @@ export class GameScene extends Phaser.Scene {
         this.timeInfo.text = ""+Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';
+            // this.scene.restart();
             this.scene.stop('Game');
         }
     }
 
     private GoRight(cursorKeys, time){
-      this.score.body.setVelocityX(500);
-      this.updateTexture('robo-forward');
-      this.robot.body.setVelocityX(500);
-      
-      this.platforms.children.entries.forEach(element => {
-        element.body.setVelocityX(0);
-      });
-      if (cursorKeys.up.isDown && !this.isJumping) {
-        this.robot.body.setVelocityY(-500);
-      }
-      if (this.robot.x >= 650) {
-        this.mainBack.tilePositionX += .5;
-        this.middleBack.tilePositionX += 2;
-        this.foregroundLayer.tilePositionX += 8.3;
+        console.log(this.robot.body.mass);
         this.score.body.setVelocityX(500);
-        this.robot.body.setVelocityX(0);
-        this.spawnPlat(time).then(() => {
-            this.platforms.children.entries.forEach(element => {
-                element.body.setVelocityX(-500);
-            });
+        if (this.robot.body.touching.right == true) {
+            this.score.body.setVelocityX(0);
+        }
+        this.updateTexture('robo-forward');
+        
+        this.platforms.children.entries.forEach(element => {
+            element.body.setVelocityX(0);
         });
-      }
+        if (cursorKeys.up.isDown && !this.isJumping) {
+            this.robot.body.setVelocityY(-500);
+        }
+        if (this.robot.x >= 650) {
+            this.mainBack.tilePositionX += .5;
+            this.middleBack.tilePositionX += 2;
+            this.foregroundLayer.tilePositionX += 8.3;
+            this.score.body.setVelocityX(500);
+            this.spawnPlat(time).then(() => {
+                this.platforms.children.entries.forEach(element => {
+                    element.body.setVelocityX(-500);
+                });
+            });
+            this.robot.body.setVelocityX(0);
+        } else {
+            this.robot.body.setVelocityX(500);
+        }
     }
 
     private GoLeft(cursorKeys){
-      this.score.body.setVelocityX(-500);  
-      this.updateTexture('robo-back');
-      this.robot.body.setVelocityX(-500);
-
-      this.platforms.children.entries.forEach(element => {
-        element.body.setVelocityX(0);
-      });
-      if (this.robot.x <= 300) {
-        this.mainBack.tilePositionX -= .5;
-        this.middleBack.tilePositionX -= 2;
-        this.foregroundLayer.tilePositionX -= 8.3;
         this.score.body.setVelocityX(-500);
-        this.robot.body.setVelocityX(0);
-        
-        this.platforms.children.entries.forEach(element => {
-          element.body.setVelocityX(500);
-        });
-      }
-      if (cursorKeys.up.isDown && !this.isJumping) {
-        this.robot.body.setVelocityY(-500);
-      }
+        if (this.robot.body.touching.left == true) {
+            this.score.body.setVelocityX(0);
+        }
+        this.updateTexture('robo-back');
+
+        if (this.robot.x <= 300) {
+            this.mainBack.tilePositionX -= .5;
+            this.middleBack.tilePositionX -= 2;
+            this.foregroundLayer.tilePositionX -= 8.3;
+            this.score.body.setVelocityX(-500);
+            this.robot.body.setVelocityX(0);
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(500);
+            });
+        } else {
+            
+            this.platforms.children.entries.forEach(element => {
+                element.body.setVelocityX(0);
+            });
+
+            this.robot.body.setVelocityX(-500);
+        }
+        if (cursorKeys.up.isDown && !this.isJumping) {
+            this.robot.body.setVelocityY(-500);
+        }
     }
     private updateTexture(texture){
       var x = this.robot.x;
@@ -280,8 +291,9 @@ export class GameScene extends Phaser.Scene {
         plat.depth = 3;
         plat.setDisplaySize(randomWidth, randomHeight);
         plat.body.immovable = true;
+        plat.setFrictionX(0);
         plat.setDisplaySize(this.randomNumber(100, 250), this.randomNumber(100, 220));
-        this.physics.add.collider(plat, this.robot);
+        this.physics.add.collider(plat, this.robot, this.smoothItOut, null, {robot: this.robot, plat});
         const platforms = this.platforms.children.entries;
         if (platforms.length > 1) {
             const height = platforms[platforms.length - 1].body.height;
@@ -301,5 +313,9 @@ export class GameScene extends Phaser.Scene {
     // Function to generate random number
     public randomNumber(min, max) {
         return Math.random() * (max - min) + min;
+    }
+
+    public smoothItOut(robot, plat) {
+        console.log(robot, plat);
     }
 }

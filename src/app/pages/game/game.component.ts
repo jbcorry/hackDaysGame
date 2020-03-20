@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
   add: any;
   userData = {
     username: "Default",
-    time: "2"
+    time: "200"
   }
   structuredTime;
   score = "Loading...";
