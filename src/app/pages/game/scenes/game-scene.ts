@@ -217,7 +217,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     private GoRight(cursorKeys, time){
-        console.log(this.robot.body.mass);
         this.score.body.setVelocityX(500);
         if (this.robot.body.touching.right == true) {
             this.score.body.setVelocityX(0);
@@ -343,6 +342,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     public smoothItOut(robot, plat) {
-        console.log(robot, plat);
+        // console.log(robot, plat);
     }
 }
