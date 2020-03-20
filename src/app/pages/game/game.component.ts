@@ -92,6 +92,8 @@ export class GameComponent implements OnInit {
           this.sendScore();
         }
         game.scene.stop('Game');
+        document.getElementById('game-over').style.display = 'block';
+        document.getElementById('game-over').style.background = 'black';
       }, (this.structuredTime * 1000) + 2000);
     })
   }

@@ -210,10 +210,6 @@ export class GameScene extends Phaser.Scene {
         this.timeTitle.text = "TIMER";
         this.userinfo.text = ""+goodScore; 
         this.timeInfo.text = ""+Math.ceil(this.timeRemaining);
-        if (Math.ceil(this.timeRemaining) == 0) {
-            document.getElementById('game-over').style.display = 'block';
-            document.getElementById('game-over').style.background = 'black';
-        }
     }
 
     private GoRight(cursorKeys, time){
