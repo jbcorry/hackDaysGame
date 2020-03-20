@@ -92,7 +92,7 @@ export class GameComponent implements OnInit {
           this.sendScore();
         }
         game.scene.stop('Game');
-      }, (this.structuredTime * 1000) + 1000);
+      }, (this.structuredTime * 1000) + 2000);
     })
   }
 
