@@ -1,0 +1,50 @@
+p {
+  font-family: "Inconsolata", monospace;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 140%;
+  letter-spacing: 0.11em;
+}
+li {
+  font-family: "Exo 2", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Inconsolata", monospace;
+}
+
+h1 {
+  font-family: "Exo 2", sans-serif;
+  font-size: 48px;
+  line-height: 140%;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #00e0ff;
+  text-shadow: 0px 0px 12px #00B0CC;
+}
+h3 {
+  font-family: "Exo 2", sans-serif;
+  font-size: 32px;
+  line-height: 140%;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: #00e0ff;
+  text-shadow: 0px 0px 12px #00B0CC;
+}
+.resize_fit_center {
+  max-width:100%;
+  max-height:100%;
+  vertical-align: middle;
+}
+.card {
+  background-color: #0E1A1C;
+  border-radius: 8px;;
+
+  p {
+    font-size:24px;
+  }
+}
