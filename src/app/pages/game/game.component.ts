@@ -25,6 +25,7 @@ export class GameComponent implements OnInit {
     username: "Default",
     time: "200"
   }
+  randomComment = this.mainService.randomComment();
   structuredTime;
   score = "Loading...";
   constructor(private router: Router, private mainService:MainService) {
