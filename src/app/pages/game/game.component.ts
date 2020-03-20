@@ -26,7 +26,7 @@ export class GameComponent implements OnInit {
     time: "2"
   }
   structuredTime;
-  score;
+  score = "Loading...";
   constructor(private router: Router, private mainService:MainService) {
     var state = this.router.getCurrentNavigation().extras.state;
     //for live
@@ -66,7 +66,7 @@ export class GameComponent implements OnInit {
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
       this.score = score.text;
-      if(this.score){
+      if(this.score !== "Loading..."){
         this.sendScore();
       }
     }, this.structuredTime * 1000);
