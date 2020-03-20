@@ -22,7 +22,7 @@ export class GameComponent implements OnInit {
       title: 'Deploy Game',
       loader: {
         user: "pee pee poo poo",
-        password: "two minutes"
+        password: "5"
       } ,
       type: Phaser.AUTO,
       scale: {
