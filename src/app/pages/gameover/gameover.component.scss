@@ -1,0 +1,71 @@
+p {
+    font-family: "Inconsolata", monospace;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 140%;
+    letter-spacing: 0.11em;
+  }
+  li {
+    font-family: "Exo 2", sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: "Inconsolata", monospace;
+  }
+  
+  h1 {
+    font-family: "Exo 2", sans-serif;
+    font-size: 48px;
+    line-height: 140%;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #00e0ff;
+    text-shadow: 0px 0px 12px #00b0cc;
+  }
+  h3 {
+    font-family: "Exo 2", sans-serif;
+    font-size: 32px;
+    line-height: 140%;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #00e0ff;
+    text-shadow: 0px 0px 12px #00b0cc;
+  }
+  .card {
+    background-color: #0e1a1c;
+    border-radius: 8px;
+  
+    p {
+      font-size: 18px;
+    }
+  }
+  button {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: "Exo 2", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    color: #00e0ff;
+    border: 2px solid #00e0ff;
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: ease 0.3s;
+    &.active {
+      background-color: #0f373d;
+    }
+  }
+  
+  button:hover {
+    background: #0f373d;
+    color: #00b0cc;
+  }
+  

@@ -25,19 +25,21 @@ export class GameComponent implements OnInit {
     username: "Default",
     time: "200"
   }
-  score;
+  structuredTime;
+  score = "Loading...";
   constructor(private router: Router, private mainService:MainService) {
     var state = this.router.getCurrentNavigation().extras.state;
     //for live
     // state ? this.userData = state.data : this.router.navigate(['/']);
     //for testing
     state ? this.userData = state.data : "";
+    this.structuredTime = (parseInt(this.userData.time) * 60).toString();
 
     this.config = {
       title: 'Deploy Game',
       loader: {
         user: this.userData.username,
-        password: this.userData.time
+        password: this.structuredTime
       } ,
       type: Phaser.AUTO,
       width: window.innerWidth,
@@ -61,15 +63,13 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     var data = {poop: "poopy"};
     const game = new Game(this.config , data);
-    var timeToPlay = parseInt(this.userData.time) * 60 * 1000;
-    // var timeToPlay = parseInt(this.userData.time) * 60 * 1000;
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
       this.score = score.text;
-      if(this.score){
+      if(this.score !== "Loading..."){
         this.sendScore();
       }
-    }, timeToPlay);
+    }, this.structuredTime * 1000);
   }
 
   sendScore(){
