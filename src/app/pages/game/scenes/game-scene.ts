@@ -12,12 +12,15 @@ export class GameScene extends Phaser.Scene {
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
-    private info: Phaser.GameObjects.Text;
+    private timeTitle: Phaser.GameObjects.Text;
+    private userTitle: Phaser.GameObjects.Text;
+    private userinfo: Phaser.GameObjects.Text;
     private timeInfo: Phaser.GameObjects.Text;
     private user: any;
     private timeRemaining: any;
     private timeLimit: any;
     public scoreNumber: Phaser.GameObjects.Text;
+    private scoreBack;
     
 
     //try robo sprite
@@ -44,6 +47,8 @@ export class GameScene extends Phaser.Scene {
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
+        this.load.image('black-back', 'assets/images/black.jpg');
+
     
         this.load.image('robo-idle', 'assets/images/player/robo-idle.png');
         this.load.image('robo-jump', 'assets/images/player/robo-jump.png');
@@ -59,14 +64,27 @@ export class GameScene extends Phaser.Scene {
 
         // score and timer
         this.score = this.add.rectangle(0, 0, 0, 0, 0xFFFFFF) as any;
+        this.scoreNumber = this.add.text(0, 0, '', { font: '1px Arial Bold', fill: '#41E0FF' });
         this.score.depth = 0;
         this.physics.add.existing(this.score);
         this.score.body.collideWorldBounds = false;
-        this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
-        this.info.depth = 10;
-        this.timeInfo = this.add.text(10, 40, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
+        var bigtext = { font: '45px Inconsolata', fill: '#41E0FF' };
+        var smalltext = { font: '16px "Exo 2"', fill: '#41E0FF' };
+        this.userinfo = this.add.text(250, 90, '', bigtext);
+        this.timeInfo = this.add.text(60, 90, '', bigtext);
+        this.userTitle = this.add.text(250, 60, '', smalltext);
+        this.timeTitle = this.add.text(60, 60, '', smalltext);
+        this.userinfo.depth = 10;
         this.timeInfo.depth = 10;
-        this.scoreNumber = this.add.text(0, 0, '', { font: '1px Arial Bold', fill: '#FBFBAC' });
+        this.userTitle.depth = 10;
+        this.timeTitle.depth = 10;
+
+
+        this.scoreBack = this.add.tileSprite(250, 100, 400, 150, 'black-back');
+        this.scoreBack.fill = true;
+        this.scoreBack.depth = 8;
+        this.scoreBack.width = 406;
+        this.scoreBack.height = 130;
 
 
         //user stuff
@@ -106,6 +124,7 @@ export class GameScene extends Phaser.Scene {
 
     }
     public update(time: number) {
+
         this.physics.collide(this.robot, this.platforms);
         this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
@@ -155,8 +174,10 @@ export class GameScene extends Phaser.Scene {
         this.scoreNumber.text = goodScore.toString();
         this.timeRemaining -= 1 / 60;
 
-        this.info.text = this.user + "'s score: " + goodScore; 
-        this.timeInfo.text = "Time Remaining: " + Math.ceil(this.timeRemaining);
+        this.userTitle.text = this.user.toUpperCase() + "'S SCORE"; 
+        this.timeTitle.text = "TIMER";
+        this.userinfo.text = ""+goodScore; 
+        this.timeInfo.text = ""+Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';
             this.scene.restart();
