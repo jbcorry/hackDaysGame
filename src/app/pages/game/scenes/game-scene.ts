@@ -14,6 +14,7 @@ export class GameScene extends Phaser.Scene {
     private info: Phaser.GameObjects.Text;
     private user: any;
     private timeLimit: any;
+    public scoreNumber: Phaser.GameObjects.Text;
     
 
     //try robo sprite
@@ -37,7 +38,6 @@ export class GameScene extends Phaser.Scene {
     
 
     public preload() {
-      console.log(this.game.config)
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
@@ -59,6 +59,8 @@ export class GameScene extends Phaser.Scene {
         this.score.body.collideWorldBounds = false;
         this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
         this.info.depth = 10;
+        this.scoreNumber = this.add.text(0, 0, '', { font: '1px Arial Bold', fill: '#FBFBAC' });
+
 
         //user stuff
         this.user = this.game.config.loaderUser;
@@ -148,6 +150,7 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
+        this.scoreNumber.text = goodScore.toString();
         this.info.text = this.user + "'s score: " + goodScore; 
     }
 
