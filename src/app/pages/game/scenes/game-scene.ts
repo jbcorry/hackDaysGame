@@ -11,6 +11,7 @@ export class GameScene extends Phaser.Scene {
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
+    private info: Phaser.GameObjects.Text;
 
     //try robo sprite
     // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
@@ -19,7 +20,6 @@ export class GameScene extends Phaser.Scene {
   
     delta: number;
     lastPlatTime: number;
-    info: Phaser.GameObjects.Text;
     plat;
     platforms;
 
@@ -37,12 +37,12 @@ export class GameScene extends Phaser.Scene {
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
     
-        this.load.image('robo-idle', 'assets/images/player/robo-idle.svg');
-        this.load.image('robo-jump', 'assets/images/player/robo-jump.svg');
-        this.load.image('robo-back', 'assets/images/player/robo-back.svg');
-        this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
-        this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
-        this.load.image('block', 'assets/images/block.png');
+        this.load.image('robo-idle', 'assets/images/player/robo-idle.png');
+        this.load.image('robo-jump', 'assets/images/player/robo-jump.png');
+        this.load.image('robo-back', 'assets/images/player/robo-back.png');
+        this.load.image('robo-forward', 'assets/images/player/robo-forward.png');
+        this.load.image('robo-spring', 'assets/images/player/robo-spring.png');
+        this.load.image('plat-center', 'assets/images/platform-center.png');
   
     }
     public create() {
@@ -52,7 +52,8 @@ export class GameScene extends Phaser.Scene {
         this.score.depth = 0;
         this.physics.add.existing(this.score);
         this.score.body.collideWorldBounds = false;
-
+        this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
+        this.info.depth = 10;
         //animations work
 
         this.anims.create({
@@ -68,6 +69,7 @@ export class GameScene extends Phaser.Scene {
         this.robot.depth = 10;
         this.physics.add.existing(this.robot);
         this.robot.body.collideWorldBounds = true;
+        // this.robot.body.setBounce(0.2);
 
         this.mainBack = this.add.tileSprite(windowWidth / 2, 0, windowWidth * 2, windowHeight, 'main-back');
         this.mainBack.depth = 0;
@@ -143,6 +145,8 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
+        console.log(this.info);
+        this.info.text = "SCORE: " + goodScore; 
     }
 
     private GoRight(cursorKeys, time){
