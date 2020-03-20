@@ -7,9 +7,11 @@ export class OrderScore implements PipeTransform {
         return;
       }
       array.sort((a: any, b: any) => {
-        if (a[field] > b[field]) {
+        var goodA = parseInt(a[field]);
+        var goodB = parseInt(b[field]);
+        if (goodA > goodB) {
           return -1;
-        } else if (a[field] < b[field]) {
+        } else if (goodA < goodB) {
           return 1;
         } else {
           return 0;
