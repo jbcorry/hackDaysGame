@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MainService } from 'src/app/services/main.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LeaderboardComponent implements OnInit {
 
-  constructor() { }
+  scores: any = [];
+
+  constructor(private mainService: MainService) {
+  }
 
   ngOnInit() {
+    // console.log(this.mainService.getScores());
+    this.mainService.getScores().subscribe((data) => {
+      this.scores = data;
+    });
+    
   }
 
 }
