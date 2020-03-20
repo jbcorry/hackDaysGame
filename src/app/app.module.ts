@@ -16,6 +16,7 @@ import { FancytextComponent } from './templates/fancytext/fancytext.component';
 import { HeaderComponent } from './templates/header/header.component';
 import { FooterComponent } from './templates/footer/footer.component';
 import { HowToPlayComponent } from './pages/howToPlay/howToPlay.component';
+import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HowToPlayComponent } from './pages/howToPlay/howToPlay.component';
     FancytextComponent,
     HeaderComponent,
     FooterComponent,
-    HowToPlayComponent
+    HowToPlayComponent,
+    LeaderboardComponent
   ],
   imports: [
     BrowserModule,
