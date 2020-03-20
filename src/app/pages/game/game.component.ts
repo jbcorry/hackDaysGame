@@ -35,7 +35,7 @@ export class GameComponent implements OnInit {
     //for testing
     state ? this.userData = state.data : "";
     // this.structuredTime = (parseInt(this.userData.time) * 60).toString();
-    this.structuredTime = 3;
+    this.structuredTime = 30;
 
     this.config = {
       title: 'Deploy Game',
