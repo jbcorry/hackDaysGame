@@ -31,11 +31,11 @@ export class GameComponent implements OnInit {
   constructor(private router: Router, private mainService:MainService) {
     var state = this.router.getCurrentNavigation().extras.state;
     //for live
-    // state ? this.userData = state.data : this.router.navigate(['/']);
+    state ? this.userData = state.data : this.router.navigate(['/']);
     //for testing
-    state ? this.userData = state.data : "";
-    // this.structuredTime = (parseInt(this.userData.time) * 60).toString();
-    this.structuredTime = 30;
+    // state ? this.userData = state.data : "";
+    this.structuredTime = (parseInt(this.userData.time) * 60).toString();
+    // this.structuredTime = 30;
 
     this.config = {
       title: 'Deploy Game',
@@ -49,7 +49,7 @@ export class GameComponent implements OnInit {
       physics: {
         default: 'arcade',
         arcade: {
-          debug: true,
+          debug: false,
           tileBias: 8,
           gravity: {y: 600}
         },
