@@ -17,6 +17,7 @@ export class GameScene extends Phaser.Scene {
     private user: any;
     private timeRemaining: any;
     private timeLimit: any;
+    public scoreNumber: Phaser.GameObjects.Text;
     
 
     //try robo sprite
@@ -40,7 +41,6 @@ export class GameScene extends Phaser.Scene {
     
 
     public preload() {
-      console.log(this.game.config)
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
@@ -62,14 +62,10 @@ export class GameScene extends Phaser.Scene {
         this.score.depth = 0;
         this.physics.add.existing(this.score);
         this.score.body.collideWorldBounds = false;
-        this.timer = this.add.rectangle(0, 0, 0, 0, 0xFFFFFF) as any;
-        this.timer.depth = 0;
-        this.physics.add.existing(this.timer);
-        this.timer.body.collideWorldBounds = false;
-        this.userInfo = this.add.text(10, 10, '', { font: '24px Inconsolata', fill: '#FBFBAC' });
-        this.timeInfo = this.add.text(10, 40, '', { font: '24px Inconsolata', fill: '#FBFBAC' });
-        this.userInfo.depth = 10;
-        this.timeInfo.depth = 10;
+        this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
+        this.info.depth = 10;
+        this.scoreNumber = this.add.text(0, 0, '', { font: '1px Arial Bold', fill: '#FBFBAC' });
+
 
         //user stuff
         this.user = this.game.config.loaderUser;
@@ -154,8 +150,8 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x / 50);
-        this.timeRemaining -= .0166;
-        this.userInfo.text = this.user + "'s score: " + goodScore;
+        this.scoreNumber.text = goodScore.toString();
+        this.userInfo.text = this.user + "'s score: " + goodScore; 
         this.timeInfo.text = "Time Remaining: " + Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';

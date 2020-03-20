@@ -1,0 +1,36 @@
+<app-header></app-header>
+
+<div class="container">
+    <div class="row mt-4 justify-content-center">
+        <div class="col-sm-12 col-md-7 p-3 mx-3">
+            <h1>Leaderboard</h1>
+            <p>This isn’t a competition, but bragging rights are allowed.</p>
+            <p>Maybe even encouraged.</p>
+            <p>Besides, you’re not going to let Frank win, are you?</p>
+        </div>
+    </div>
+
+    <div class="row mt-4 justify-content-center">
+        <div class="col-sm-12 col-md-7 p-4 mx-3 mb-5 card">
+            <table class="table table-hover table-borderless">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- <tr *ngFor="let score of scores | orderBy: 'score.payload.doc.data().score'; let i=index"> -->
+                    <tr *ngFor="let score of scores; let i=index">
+                    <th scope="row">{{i + 1}}</th>
+                    <td>{{score.payload.doc.data().score}}</td>
+                    <td>{{score.payload.doc.data().username}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>
