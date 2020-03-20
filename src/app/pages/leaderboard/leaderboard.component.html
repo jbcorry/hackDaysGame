@@ -14,11 +14,11 @@
         <div class="col-sm-12 col-md-7 p-4 mx-3 mb-5 card">
             <table class="table table-hover table-borderless">
                 <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Name</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Name</th>
+                    </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let score of scores | orderScore: 'score'; let i = index">
@@ -27,7 +27,7 @@
                     <td>{{score.username}}</td>
                   </tr>
                 </tbody>
-              </table>
+            </table>
         </div>
     </div>
 </div>
