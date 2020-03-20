@@ -23,7 +23,7 @@ export class GameComponent implements OnInit {
   add: any;
   userData = {
     username: "Default",
-    time: "2"
+    time: "200"
   }
   score;
   constructor(private router: Router, private mainService:MainService) {
@@ -61,7 +61,7 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     var data = {poop: "poopy"};
     const game = new Game(this.config , data);
-    var timeToPlay = parseInt(this.userData.time) * 60 * 100;
+    var timeToPlay = parseInt(this.userData.time) * 60 * 1000;
     // var timeToPlay = parseInt(this.userData.time) * 60 * 1000;
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
