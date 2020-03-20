@@ -30,5 +30,19 @@ export class MainService {
       }
       return this.firestore.collection('users').add(user);
     }
+    randomComment(){
+      const comments = [
+        'now get back to work, nerd!',
+        'are you sure your code\'s not done building?',
+        'WHOA! is that your manager looking over your shoulder?',
+        'NEW HIGH SCORE!!!! JK u are terrible',
+        'look at you, jumping over platforms like it\'s your job...lame',
+        'you are so good at this game!!!  now go do something productive with your life',
+        'do you have ligma? because your gameplay shows it',
+        'playing games at work? reaaal mature'
+      ];
+      const randomNum = Math.floor(Math.random() * (comments.length - 1));
+      return comments[randomNum];
+    }
 
 }
