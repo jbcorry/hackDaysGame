@@ -1,0 +1,12 @@
+#game-over {
+    position: relative;
+    margin-top: 300px;
+    display: none;
+
+    a {
+        min-width: 300px;
+        height: 80px;
+        border: 3px solid #00B0CC;
+        padding: 10px 25px;
+    }
+}

@@ -22,11 +22,13 @@ export class GameComponent implements OnInit {
   constructor() {
     this.config = {
       title: 'Deploy Game',
+      loader: {
+        user: "pee pee poo poo",
+        password: "1"
+      } ,
       type: Phaser.AUTO,
-      scale: {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      },
+      width: window.innerWidth,
+      height: window.innerHeight,
       physics: {
         default: 'arcade',
         arcade: {
@@ -40,19 +42,23 @@ export class GameComponent implements OnInit {
       },
       parent: 'game',
       backgroundColor: '#000000',
-      scene: [GameScene, GameOverScene],
+      scene: [GameScene],
     };
   }
   ngOnInit() {
-    const game = new Game(this.config);
-    game.data.set({test: 'test'});
+    var data = {poop: "poopy"};
+    const game = new Game(this.config , data);
+    setTimeout(()=>{
+      var timey = game.getTime();
+      var score = game.scene;
+      console.log(timey);
+    }, 8000);
   }
 }
 
 export class Game extends Phaser.Game {
-  constructor(config: Phaser.Types.Core.GameConfig) {
+  constructor(config: Phaser.Types.Core.GameConfig, data) {
     super(config);
-
   }
 }
 

@@ -12,7 +12,12 @@ export class GameScene extends Phaser.Scene {
     public isJumping = false;
     public isFalling = false;
     public lastSpriteY = 0;
-    private info: Phaser.GameObjects.Text;
+    private userInfo: Phaser.GameObjects.Text;
+    private timeInfo: Phaser.GameObjects.Text;
+    private user: any;
+    private timeRemaining: any;
+    private timeLimit: any;
+    
 
     //try robo sprite
     // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
@@ -32,8 +37,10 @@ export class GameScene extends Phaser.Scene {
       this.delta = 1000;
       this.lastPlatTime = 0;
     }
+    
 
     public preload() {
+      console.log(this.game.config)
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
@@ -47,7 +54,6 @@ export class GameScene extends Phaser.Scene {
   
     }
     public create() {
-        console.log(this.game);
         let windowWidth = this.game.canvas.width;
         let windowHeight = this.game.canvas.height;
 
@@ -60,14 +66,14 @@ export class GameScene extends Phaser.Scene {
         this.timer.depth = 0;
         this.physics.add.existing(this.timer);
         this.timer.body.collideWorldBounds = false;
-        this.info = this.add.text(10, 10, '', { font: '24px Inconsolata', fill: '#FBFBAC' });
-        this.info.depth = 10;
+        this.userInfo = this.add.text(10, 10, '', { font: '24px Inconsolata', fill: '#FBFBAC' });
+        this.timeInfo = this.add.text(10, 40, '', { font: '24px Inconsolata', fill: '#FBFBAC' });
+        this.userInfo.depth = 10;
+        this.timeInfo.depth = 10;
 
-        // animations work
-
-        this.anims.create({
-          
-        })
+        //user stuff
+        this.user = this.game.config.loaderUser;
+        this.timeRemaining = this.game.config.loaderPassword;
 
         //robo sprite
         this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward').setOrigin(0, 0);
@@ -102,7 +108,6 @@ export class GameScene extends Phaser.Scene {
 
     }
     public update(time: number) {
-  
         this.physics.collide(this.robot, this.platforms);
         this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
@@ -116,11 +121,6 @@ export class GameScene extends Phaser.Scene {
         });
 
         const cursorKeys = this.input.keyboard.createCursorKeys();
-        
-        //restart game
-        if (cursorKeys.space.isDown) {
-          this.scene.restart();
-        }
 
         // // check jumping
         var goodY = Math.floor(this.robot.y);
@@ -153,8 +153,14 @@ export class GameScene extends Phaser.Scene {
           }
         }
         //set Score
-        var goodScore = Math.floor(this.score.x / 50) ;
-        this.info.text = "SCORE: " + goodScore; 
+        var goodScore = Math.floor(this.score.x / 50);
+        this.timeRemaining -= .0166;
+        this.userInfo.text = this.user + "'s score: " + goodScore;
+        this.timeInfo.text = "Time Remaining: " + Math.ceil(this.timeRemaining);
+        if (Math.ceil(this.timeRemaining) == 0) {
+            document.getElementById('game-over').style.display = 'block';
+            this.scene.stop('Game');
+        }
     }
 
     private GoRight(cursorKeys, time){
