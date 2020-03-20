@@ -34,7 +34,7 @@ export class GameComponent implements OnInit {
     //for testing
     state ? this.userData = state.data : "";
     // this.structuredTime = (parseInt(this.userData.time) * 60).toString();
-    this.structuredTime = 10;
+    this.structuredTime = 3;
 
     this.config = {
       title: 'Deploy Game',
@@ -64,12 +64,14 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     var data = {poop: "poopy"};
     const game = new Game(this.config , data);
+    game.isRunning
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
       this.score = score.text;
       if(this.score !== "Loading..."){
         this.sendScore();
       }
+      game.scene.stop('Game');
     }, (this.structuredTime * 1000) + 3000);
   }
 
