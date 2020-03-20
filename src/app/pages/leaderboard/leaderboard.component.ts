@@ -9,6 +9,7 @@ import { MainService } from 'src/app/services/main.service';
 export class LeaderboardComponent implements OnInit {
 
   scores = [];
+  timeSelect = "2"
 
   constructor(private mainService: MainService) { }
 

@@ -21,13 +21,13 @@
     </div>
     <div class="row justify-content-between">
         <div class="col-auto">
+            <button (click)="timeSelect = '1'" [ngClass]="{active: timeSelect == '1'}">1 Min</button>
+        </div>
+        <div class="col-auto">
             <button (click)="timeSelect = '2'" [ngClass]="{active: timeSelect == '2'}">2 Mins</button>
         </div>
         <div class="col-auto">
             <button (click)="timeSelect = '5'" [ngClass]="{active: timeSelect == '5'}">5 Mins</button>
-        </div>
-        <div class="col-auto">
-            <button (click)="timeSelect = '10'" [ngClass]="{active: timeSelect == '10'}">10 Mins</button>
         </div>
     </div>
     <div class="row mt-4 justify-content-center">

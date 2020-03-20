@@ -2,11 +2,18 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'orderScore'})
 export class OrderScore implements PipeTransform {
-  transform(array: string, field): string {
+  transform(array: string, fields){
+    var field = fields.score;
     if (!Array.isArray(array)) {
         return;
       }
-      array.sort((a: any, b: any) => {
+      var goodArr = [];
+      array.filter((val)=>{
+        if(val.time == fields.time){
+          goodArr.push(val);
+        }
+      })
+      goodArr.sort((a: any, b: any) => {
         var goodA = parseInt(a[field]);
         var goodB = parseInt(b[field]);
         if (goodA > goodB) {
@@ -17,6 +24,6 @@ export class OrderScore implements PipeTransform {
           return 0;
         }
       });
-      return array;
+      return goodArr;
   }
 }

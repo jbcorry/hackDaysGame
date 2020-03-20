@@ -19,13 +19,13 @@
             </div>
             <div class="row mb-4 mt-n2">
                 <div class="col-auto mr-n2">
+                    <button (click)="timeSelect = '1'" [ngClass]="{active: timeSelect == '1'}">1 mins</button>
+                </div>
+                <div class="col-auto mr-n2">
                     <button (click)="timeSelect = '2'" [ngClass]="{active: timeSelect == '2'}">2 mins</button>
                 </div>
                 <div class="col-auto mr-n2">
                     <button (click)="timeSelect = '5'" [ngClass]="{active: timeSelect == '5'}">5 mins</button>
-                </div>
-                <div class="col-auto mr-n2">
-                    <button (click)="timeSelect = '10'" [ngClass]="{active: timeSelect == '10'}">10 mins</button>
                 </div>
             </div>
             <table class="table table-hover table-borderless">
@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let score of scores | orderScore: 'score'; let i = index">
+                  <tr *ngFor="let score of scores | orderScore: {'score':'score', 'time': timeSelect}; let i = index">
                     <th scope="row">{{i + 1}}</th>
                     <td>{{score.score}}</td>
                     <td>{{score.username}}</td>

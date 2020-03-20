@@ -70,10 +70,10 @@ export class GameScene extends Phaser.Scene {
         this.score.body.collideWorldBounds = false;
         var bigtext = { font: '45px Inconsolata', fill: '#41E0FF' };
         var smalltext = { font: '16px "Exo 2"', fill: '#41E0FF' };
-        this.userinfo = this.add.text(250, 90, '', bigtext);
-        this.timeInfo = this.add.text(60, 90, '', bigtext);
-        this.userTitle = this.add.text(250, 60, '', smalltext);
-        this.timeTitle = this.add.text(60, 60, '', smalltext);
+        this.userinfo = this.add.text(350, 90, '', bigtext);
+        this.timeInfo = this.add.text(160, 90, '', bigtext);
+        this.userTitle = this.add.text(350, 60, '', smalltext);
+        this.timeTitle = this.add.text(160, 60, '', smalltext);
         this.userTitle.setShadow(1, 1, '#41E0FF', 10);
         this.timeTitle.setShadow(1, 1, '#41E0FF', 10)
         this.userinfo.setShadow(3, 3, '#41E0FF', 5);
@@ -84,7 +84,7 @@ export class GameScene extends Phaser.Scene {
         this.timeTitle.depth = 10;
 
 
-        this.scoreBack = this.add.tileSprite(250, 100, 400, 150, 'black-back');
+        this.scoreBack = this.add.tileSprite(350, 100, 400, 150, 'black-back');
         this.scoreBack.fill = true;
         this.scoreBack.depth = 8;
         this.scoreBack.width = 406;
@@ -184,6 +184,7 @@ export class GameScene extends Phaser.Scene {
         this.timeInfo.text = ""+Math.ceil(this.timeRemaining);
         if (Math.ceil(this.timeRemaining) == 0) {
             document.getElementById('game-over').style.display = 'block';
+            document.getElementById('game-over').style.background = 'black';
         }
     }
 
