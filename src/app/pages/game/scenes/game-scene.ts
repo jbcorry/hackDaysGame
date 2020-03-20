@@ -52,7 +52,8 @@ export class GameScene extends Phaser.Scene {
         this.score.depth = 0;
         this.physics.add.existing(this.score);
         this.score.body.collideWorldBounds = false;
-
+        this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
+        this.info.depth = 10;
         //animations work
 
         this.anims.create({
@@ -68,6 +69,7 @@ export class GameScene extends Phaser.Scene {
         this.robot.depth = 10;
         this.physics.add.existing(this.robot);
         this.robot.body.collideWorldBounds = true;
+        // this.robot.body.setBounce(0.2);
 
         this.mainBack = this.add.tileSprite(windowWidth / 2, 0, windowWidth * 2, windowHeight, 'main-back');
         this.mainBack.depth = 0;
@@ -144,7 +146,7 @@ export class GameScene extends Phaser.Scene {
         //set Score
         var goodScore = Math.floor(this.score.x);
         console.log(this.info);
-        // this.info.text = "SCORE: " + goodScore; 
+        this.info.text = "SCORE: " + goodScore; 
     }
 
     private GoRight(cursorKeys, time){
