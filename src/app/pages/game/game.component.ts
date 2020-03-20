@@ -20,6 +20,10 @@ export class GameComponent implements OnInit {
   constructor() {
     this.config = {
       title: 'Deploy Game',
+      loader: {
+        user: "pee pee poo poo",
+        password: "two minutes"
+      } ,
       type: Phaser.AUTO,
       scale: {
         width: window.innerWidth,
@@ -42,12 +46,18 @@ export class GameComponent implements OnInit {
     };
   }
   ngOnInit() {
-    const game = new Game(this.config);
+    var data = {poop: "poopy"}
+    const game = new Game(this.config , data);
+    setTimeout(()=>{
+      var timey = game.getTime();
+      var score = game.scene
+      console.log(timey)
+    }, 8000)
   }
 }
 
 export class Game extends Phaser.Game {
-  constructor(config: Phaser.Types.Core.GameConfig) {
+  constructor(config: Phaser.Types.Core.GameConfig, data) {
     super(config);
   }
 }

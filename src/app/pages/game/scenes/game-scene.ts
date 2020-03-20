@@ -12,6 +12,9 @@ export class GameScene extends Phaser.Scene {
     public isFalling = false;
     public lastSpriteY = 0;
     private info: Phaser.GameObjects.Text;
+    private user: any;
+    private timeLimit: any;
+    
 
     //try robo sprite
     // private robot: Phaser.GameObjects.Sprite & { body: Phaser.Physics.Arcade.Body };
@@ -31,8 +34,10 @@ export class GameScene extends Phaser.Scene {
       this.delta = 1000;
       this.lastPlatTime = 0;
     }
+    
 
     public preload() {
+      console.log(this.game.config)
         this.load.image('middle-bg', 'assets/images/middle-bg.png');
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
@@ -54,11 +59,10 @@ export class GameScene extends Phaser.Scene {
         this.score.body.collideWorldBounds = false;
         this.info = this.add.text(10, 10, '', { font: '24px Arial Bold', fill: '#FBFBAC' });
         this.info.depth = 10;
-        //animations work
 
-        this.anims.create({
-          
-        })
+        //user stuff
+        this.user = this.game.config.loaderUser;
+        this.timeLimit = this.game.config.loaderPassword;
 
         //robo sprite
         this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward').setOrigin(0, 0);
@@ -93,7 +97,6 @@ export class GameScene extends Phaser.Scene {
 
     }
     public update(time: number) {
-  
         this.physics.collide(this.robot, this.platforms);
         this.physics.collide(this.robot, this.foregroundLayer);
         this.platforms.children.entries.forEach(element => {
@@ -145,8 +148,7 @@ export class GameScene extends Phaser.Scene {
         }
         //set Score
         var goodScore = Math.floor(this.score.x);
-        console.log(this.info);
-        this.info.text = "SCORE: " + goodScore; 
+        this.info.text = this.user + "'s score: " + goodScore; 
     }
 
     private GoRight(cursorKeys, time){
