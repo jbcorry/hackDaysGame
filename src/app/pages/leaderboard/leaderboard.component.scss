@@ -61,11 +61,15 @@ button {
   cursor: pointer;
   transition: ease 0.3s;
   &.active {
-    background-color: #0f373d;
+    color: #FFB800;
+    background-color: #322A16;
+    border: 2px solid #FFB800;
   }
 }
 
 button:hover {
-  background: #0f373d;
-  color: #00b0cc;
+  &.active {
+    background: #322A16;
+  }
+  background: #0F373D;
 }
