@@ -16,11 +16,14 @@ export class GameScene extends Phaser.Scene {
     private userTitle: Phaser.GameObjects.Text;
     private userinfo: Phaser.GameObjects.Text;
     private timeInfo: Phaser.GameObjects.Text;
+    private homeTitle: Phaser.GameObjects.Text;
     private user: any;
     private timeRemaining: any;
     private timeLimit: any;
     public scoreNumber: Phaser.GameObjects.Text;
     private scoreBack;
+    private homeBack;
+    private goHome;
     
 
     //try robo sprite
@@ -48,6 +51,8 @@ export class GameScene extends Phaser.Scene {
         this.load.image('main-back', 'assets/images/main-bg.png');
         this.load.image('foregroundLayer', 'assets/images/floor.png');
         this.load.image('black-back', 'assets/images/black.jpg');
+        this.load.image('small-black', 'assets/images/small-black.jpg');
+        this.load.image('go-home', 'assets/images/go-home.png');
 
     
         this.load.image('robo-idle', 'assets/images/player/robo-idle.png');
@@ -77,7 +82,7 @@ export class GameScene extends Phaser.Scene {
         this.userTitle.setShadow(1, 1, '#41E0FF', 10);
         this.timeTitle.setShadow(1, 1, '#41E0FF', 10)
         this.userinfo.setShadow(3, 3, '#41E0FF', 5);
-        this.timeInfo.setShadow(3, 3, '#41E0FF', 5)
+        this.timeInfo.setShadow(3, 3, '#41E0FF', 5);
         this.userinfo.depth = 10;
         this.timeInfo.depth = 10;
         this.userTitle.depth = 10;
@@ -89,6 +94,29 @@ export class GameScene extends Phaser.Scene {
         this.scoreBack.depth = 8;
         this.scoreBack.width = 406;
         this.scoreBack.height = 130;
+
+        this.homeBack = this.add.tileSprite(85, 100, 100, 150, 'small-black');
+        this.homeBack.fill = true;
+        this.homeBack.depth = 8;
+        this.homeBack.width = 100;
+        this.homeBack.height = 130;
+
+        this.homeTitle = this.add.text(60, 60, '', smalltext);
+        this.homeTitle.text = "ROBOY";
+        this.homeTitle.depth = 10;
+        this.homeTitle.setShadow(1, 1, '#41E0FF', 10)
+        this.goHome = this.add.tileSprite(85, 120, 25, 25, 'go-home');
+        this.goHome.depth = 10;
+        this.goHome.width = 48;
+        this.goHome.height = 60;
+        this.homeTitle.setInteractive();
+        // this.homeTitle.on('pointerdown', onHomeClick());
+
+        // function onHomeClick(): () => void {
+        //     console.log("whyyyyy")
+        //     // window.location.href = "/";
+        //     return
+        // }
 
 
         //user stuff
