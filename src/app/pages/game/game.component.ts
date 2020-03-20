@@ -66,7 +66,9 @@ export class GameComponent implements OnInit {
     setTimeout(()=>{
       var score = game.scene.scenes[0].scoreNumber;
       this.score = score.text;
-      this.sendScore();
+      if(this.score){
+        this.sendScore();
+      }
     }, timeToPlay);
   }
 
