@@ -2,10 +2,10 @@
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
     active: false,
     visible: false,
-    key: 'Game',
+    key: 'GameOver',
 };
 
-export class GameScene extends Phaser.Scene {
+export class GameOverScene extends Phaser.Scene {
     private mainBack; middleBack; foregroundLayer;
     private score: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
     private timer: Phaser.GameObjects.Rectangle & { body: Phaser.Physics.Arcade.Body };
@@ -47,7 +47,7 @@ export class GameScene extends Phaser.Scene {
   
     }
     public create() {
-        console.log(this.game);
+        console.log('game over');
         let windowWidth = this.game.canvas.width;
         let windowHeight = this.game.canvas.height;
 

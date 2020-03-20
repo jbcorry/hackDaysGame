@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser';
 import { GameScene } from "./scenes/game-scene";
+import { GameOverScene } from "./scenes/game-over-scene";
+
 
 
 
@@ -38,17 +40,19 @@ export class GameComponent implements OnInit {
       },
       parent: 'game',
       backgroundColor: '#000000',
-      scene: [GameScene]
+      scene: [GameScene, GameOverScene],
     };
   }
   ngOnInit() {
     const game = new Game(this.config);
+    game.data.set({test: 'test'});
   }
 }
 
 export class Game extends Phaser.Game {
   constructor(config: Phaser.Types.Core.GameConfig) {
     super(config);
+
   }
 }
 
