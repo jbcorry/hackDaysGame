@@ -29,6 +29,7 @@ export class GameComponent implements OnInit {
         default: 'arcade',
         arcade: {
           debug: true,
+          tileBias: 8,
           gravity: {y: 600}
         },
       },

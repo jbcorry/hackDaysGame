@@ -42,7 +42,7 @@ export class GameScene extends Phaser.Scene {
         this.load.image('robo-back', 'assets/images/player/robo-back.svg');
         this.load.image('robo-forward', 'assets/images/player/robo-forward.svg');
         this.load.image('robo-spring', 'assets/images/player/robo-spring.svg');
-        this.load.image('plat-center', 'assets/images/platform-center.png');
+        this.load.image('block', 'assets/images/block.png');
   
     }
     public create() {
@@ -60,7 +60,7 @@ export class GameScene extends Phaser.Scene {
         })
 
         //robo sprite
-        this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward');
+        this.robot = this.add.sprite(200, windowHeight / 2 - 70, 'robo-forward').setOrigin(0, 0);
         this.robot.setTexture('robo-idle');
         this.robot.height = 100;
         this.robot.width = 75;
@@ -75,7 +75,7 @@ export class GameScene extends Phaser.Scene {
         this.mainBack.height = this.sys.canvas.height * 10;
         this.mainBack.scaleX = .3;
         this.mainBack.scaleY = .3;
-        this.middleBack = this.add.tileSprite(0, this.sys.canvas.height * 2 - 100, windowWidth, 500, 'middle-bg');
+        this.middleBack = this.add.tileSprite(this.sys.canvas.height, this.sys.canvas.height * 2 - 100, windowWidth, 500, 'middle-bg');
         this.middleBack.width = this.sys.canvas.width * 10;
         this.middleBack.height = this.sys.canvas.height * 10;
         this.middleBack.scaleX = .3;
@@ -230,10 +230,10 @@ export class GameScene extends Phaser.Scene {
     private newPlat(): void {
         let plat: Phaser.Physics.Arcade.Image;
         let randomHeight = this.randomNumber(100, 240);
-        let randomWidth = this.randomNumber(100, 250);
+        let randomWidth = this.randomNumber(150, 350);
         let x = this.game.canvas.width;
         let y = this.game.canvas.height;
-        plat = this.physics.add.image(x, y, 'plat-center');
+        plat = this.physics.add.image(x, y, 'block');
         plat.depth = 3;
         plat.setDisplaySize(randomWidth, randomHeight);
         plat.body.immovable = true;
